@@ -127,7 +127,7 @@ COLOR_KEYS = ("color", "colour", "colorname", "colourname")
 
 
 @dataclass
-class SearchCall:
+class NetworkCall:
     started_at: str
     method: str
     status: int
@@ -144,7 +144,15 @@ class SearchCall:
     colors: list[str]
     request_snippet: str
     response_snippet: str
-    keyword_signals: dict[str, dict[str, Any]]
+    wait_ms: float
+    blocked_ms: float
+    dns_ms: float
+    connect_ms: float
+    ssl_ms: float
+    send_ms: float
+    receive_ms: float
+    size_bytes: int
+    hang_reasons: list[str]
 
 
 def load_har(file_path: str) -> dict[str, Any]:
@@ -341,13 +349,17 @@ def classify_request(
     return "Unknown", "LOW", request_score
 
 
-def should_include_call(category: str, keywords: list[str], keyword_matches: bool) -> bool:
-    if keywords:
-        return keyword_matches
-    return category in {"Search", "Autocomplete / Recommendations", "GraphQL (non-search)"}
+def should_include_call(category: str) -> bool:
+    return category in {
+        "Search",
+        "Autocomplete / Recommendations",
+        "GraphQL (non-search)",
+        "Telemetry / Analytics",
+        "Unknown",
+    }
 
 
-def format_endpoint_label(call: SearchCall) -> str:
+def format_endpoint_label(call: NetworkCall) -> str:
     parsed_url = urlparse(call.url)
     label = f"{call.method} {parsed_url.path or '/'}"
     if call.graphql_operation:
@@ -422,39 +434,95 @@ def collect_values(payload: Any, keys: tuple[str, ...], limit: int = 5) -> list[
     return dedupe(matches)
 
 
-def compute_keyword_signals(keyword: str, request_text: str, response_text: str, product_names: list[str], colors: list[str]) -> dict[str, Any]:
-    keyword_lower = keyword.lower()
-    tokens = [token for token in re.findall(r"[a-z0-9]+", keyword_lower) if token]
-    slash_variants = {
-        f"{keyword_lower}/{keyword_lower}",
-        f"{keyword_lower} / {keyword_lower}",
-    }
-    response_lower = response_text.lower()
-    request_lower = request_text.lower()
-    return {
-        "request_contains_keyword": keyword_lower in request_lower,
-        "response_contains_keyword": keyword_lower in response_lower,
-        "response_contains_slash_variant": any(variant in response_lower for variant in slash_variants),
-        "all_tokens_in_response": bool(tokens) and all(token in response_lower for token in tokens),
-        "catalog_exact_hits": sum(keyword_lower in value.lower() for value in product_names + colors),
-        "catalog_token_hits": sum(any(token in value.lower() for token in tokens) for value in product_names + colors),
-    }
+def safe_timing(timings: dict[str, Any], key: str) -> float:
+    value = timings.get(key, -1)
+    if isinstance(value, (int, float)) and value >= 0:
+        return float(value)
+    return 0.0
 
 
-def is_keyword_match(keyword: str, request_terms: list[str], request_snippet: str, response_snippet: str, product_names: list[str], colors: list[str]) -> bool:
-    haystacks = request_terms + [request_snippet, response_snippet] + product_names + colors
-    target = keyword.lower()
-    return any(target in value.lower() for value in haystacks if value)
+def describe_hang_reasons(
+    status: int,
+    duration_ms: float,
+    wait_ms: float,
+    blocked_ms: float,
+    connect_ms: float,
+    receive_ms: float,
+) -> list[str]:
+    reasons: list[str] = []
+    if status == 0:
+        reasons.append("request did not complete (status=0)")
+    if status >= 500:
+        reasons.append("server error response")
+    elif status >= 400:
+        reasons.append("client or auth error response")
+    if duration_ms >= 8000:
+        reasons.append("very slow total duration")
+    elif duration_ms >= 3000:
+        reasons.append("slow total duration")
+    if wait_ms >= 4000:
+        reasons.append("long server wait (TTFB)")
+    if blocked_ms >= 1000:
+        reasons.append("high queue/blocked time")
+    if connect_ms >= 1500:
+        reasons.append("slow network connect")
+    if receive_ms >= 2000:
+        reasons.append("slow response download")
+    return reasons
 
 
-def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, Any]:
+def hang_severity(call: NetworkCall) -> float:
+    score = 0.0
+    score += min(call.duration_ms / 1000.0, 20.0)
+    score += min(call.wait_ms / 800.0, 20.0)
+    score += min(call.blocked_ms / 400.0, 10.0)
+    score += min(call.connect_ms / 600.0, 10.0)
+    if call.status == 0:
+        score += 12.0
+    elif call.status >= 500:
+        score += 8.0
+    elif call.status >= 400:
+        score += 4.0
+    return round(score, 1)
+
+
+def build_hang_core_findings(results: dict[str, Any], network_calls: list[NetworkCall]) -> list[str]:
+    findings: list[str] = []
+    total = max(results["total_requests"], 1)
+    failed = results["failed_call_count"]
+    slow = results["slow_call_count"]
+    stalled = results["stalled_call_count"]
+
+    findings.append(
+        f"Hanging Profile: failed={failed}/{total} ({(failed/total)*100:.1f}%), "
+        f"slow={slow}/{total} ({(slow/total)*100:.1f}%), stalled={stalled}/{total} ({(stalled/total)*100:.1f}%)."
+    )
+
+    if results["failure_reason_counts"]:
+        top_reason, top_count = results["failure_reason_counts"].most_common(1)[0]
+        findings.append(f"Primary Hang Signal: {top_reason} ({top_count} request(s)).")
+
+    hang_candidates = [call for call in network_calls if call.hang_reasons]
+    if hang_candidates:
+        worst = max(hang_candidates, key=hang_severity)
+        findings.append(
+            "Top Hang Suspect: "
+            f"{worst.method} {worst.status} {worst.duration_ms:.0f}ms {worst.url} "
+            f"(severity={hang_severity(worst):.1f}; reasons: {', '.join(worst.hang_reasons)})."
+        )
+
+    return findings
+
+
+def analyze_har(file_path: str) -> dict[str, Any]:
     data = load_har(file_path)
     entries = data.get("log", {}).get("entries", [])
 
-    search_calls: list[SearchCall] = []
+    network_calls: list[NetworkCall] = []
     status_counts = Counter()
     domain_counts = Counter()
     category_counts = Counter()
+    failure_reason_counts = Counter()
     endpoint_counts_by_category: dict[str, Counter] = {}
     domain_counts_by_category: dict[str, Counter] = {}
 
@@ -472,6 +540,15 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
         response_json = parse_json_like(response_text)
         body_json = parse_json_like(request.get("postData", {}).get("text", ""))
         graphql_operation = parse_graphql_operation(body_json)
+        timings = entry.get("timings", {}) if isinstance(entry.get("timings", {}), dict) else {}
+        wait_ms = safe_timing(timings, "wait")
+        blocked_ms = safe_timing(timings, "blocked")
+        dns_ms = safe_timing(timings, "dns")
+        connect_ms = safe_timing(timings, "connect")
+        ssl_ms = safe_timing(timings, "ssl")
+        send_ms = safe_timing(timings, "send")
+        receive_ms = safe_timing(timings, "receive")
+        size_bytes = int(response.get("bodySize", 0) or 0)
         response_score = 1 if extract_result_count(response_json) is not None else 0
         response_score += 1 if any(hint in response_text.lower() for hint in ("products", "results", "search")) else 0
         total_score = endpoint_score + response_score
@@ -490,25 +567,19 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
         )
         total_score = max(total_score, classified_score)
 
-        keyword_signals = {}
-        keyword_matches = False
-        if keywords:
-            for keyword in keywords:
-                keyword_signals[keyword] = compute_keyword_signals(
-                    keyword,
-                    " | ".join(request_terms + [request_snippet]),
-                    response_text,
-                    product_names,
-                    colors,
-                )
-
-            keyword_matches = any(
-                is_keyword_match(keyword, request_terms, request_snippet, response_text[:500], product_names, colors)
-                for keyword in keywords
-            )
+        hang_reasons = describe_hang_reasons(
+            status,
+            float(entry.get("time", 0) or 0),
+            wait_ms,
+            blocked_ms,
+            connect_ms,
+            receive_ms,
+        )
+        for reason in hang_reasons:
+            failure_reason_counts[reason] += 1
 
         endpoint = format_endpoint_label(
-            SearchCall(
+            NetworkCall(
                 started_at="",
                 method=request.get("method", "GET"),
                 status=status,
@@ -525,7 +596,15 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
                 colors=[],
                 request_snippet="",
                 response_snippet="",
-                keyword_signals={},
+                wait_ms=0.0,
+                blocked_ms=0.0,
+                dns_ms=0.0,
+                connect_ms=0.0,
+                ssl_ms=0.0,
+                send_ms=0.0,
+                receive_ms=0.0,
+                size_bytes=0,
+                hang_reasons=[],
             )
         )
         category_counts[category] += 1
@@ -535,11 +614,11 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
         if total_score < 3 and not request_terms and category == "Unknown":
             continue
 
-        if not should_include_call(category, keywords or [], keyword_matches):
+        if not should_include_call(category):
             continue
 
-        search_calls.append(
-            SearchCall(
+        network_calls.append(
+            NetworkCall(
                 started_at=entry.get("startedDateTime", ""),
                 method=request.get("method", "GET"),
                 status=status,
@@ -556,9 +635,21 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
                 colors=colors,
                 request_snippet=request_snippet,
                 response_snippet=normalize_whitespace(response_text[:260]),
-                keyword_signals=keyword_signals,
+                wait_ms=wait_ms,
+                blocked_ms=blocked_ms,
+                dns_ms=dns_ms,
+                connect_ms=connect_ms,
+                ssl_ms=ssl_ms,
+                send_ms=send_ms,
+                receive_ms=receive_ms,
+                size_bytes=size_bytes,
+                hang_reasons=hang_reasons,
             )
         )
+
+    failed_calls = [call for call in network_calls if call.status == 0 or call.status >= 400]
+    slow_calls = [call for call in network_calls if call.duration_ms >= 3000]
+    stalled_calls = [call for call in network_calls if call.wait_ms >= 4000 or call.blocked_ms >= 1000]
 
     return {
         "file_path": file_path,
@@ -566,6 +657,10 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
         "top_domains": domain_counts.most_common(5),
         "status_counts": status_counts,
         "category_counts": category_counts,
+        "failure_reason_counts": failure_reason_counts,
+        "failed_call_count": len(failed_calls),
+        "slow_call_count": len(slow_calls),
+        "stalled_call_count": len(stalled_calls),
         "top_endpoints_by_category": {
             category: counter.most_common(10)
             for category, counter in endpoint_counts_by_category.items()
@@ -574,51 +669,38 @@ def analyze_har(file_path: str, keywords: list[str] | None = None) -> dict[str, 
             category: counter.most_common(5)
             for category, counter in domain_counts_by_category.items()
         },
-        "search_calls": sorted(search_calls, key=lambda call: (call.started_at, call.duration_ms)),
-        "keywords": keywords or [],
+        "network_calls": sorted(network_calls, key=lambda call: (call.started_at, call.duration_ms)),
     }
 
 
-def summarize_keyword_diagnostics(search_calls: list[SearchCall], keywords: list[str]) -> list[str]:
-    diagnostics: list[str] = []
-
-    for keyword in keywords:
-        matched_calls = [call for call in search_calls if keyword in call.keyword_signals]
-        if not matched_calls:
-            diagnostics.append(f"- {keyword}: no matching search calls were found in the HAR.")
-            continue
-
-        zero_result_calls = [call for call in matched_calls if call.result_count == 0]
-        slash_variant_hits = sum(
-            call.keyword_signals[keyword]["response_contains_slash_variant"] for call in matched_calls
-        )
-        exact_hits = sum(call.keyword_signals[keyword]["response_contains_keyword"] for call in matched_calls)
-        broad_calls = [call for call in matched_calls if call.result_count is not None and call.result_count >= 50]
-        weak_catalog_hits = [call for call in broad_calls if call.keyword_signals[keyword]["catalog_exact_hits"] == 0]
-        multi_term_failure = len(keyword.split()) > 1 and zero_result_calls
-
-        parts = [f"- {keyword}: {len(matched_calls)} matching search call(s)"]
-        if zero_result_calls:
-            parts.append(f"{len(zero_result_calls)} returned zero results")
-        if slash_variant_hits > exact_hits:
-            parts.append("response favored slash-form canonical values over the plain keyword")
-        if weak_catalog_hits:
-            parts.append("broad result sets showed weak exact catalog-name hits")
-        if multi_term_failure:
-            parts.append("multi-term query behavior looks stricter than single-token matching")
-
-        diagnostics.append("; ".join(parts) + ".")
-
-    return diagnostics
-
-
 def print_summary(results: dict[str, Any], limit: int) -> None:
-    search_calls: list[SearchCall] = results["search_calls"]
+    network_calls: list[NetworkCall] = results["network_calls"]
+    hang_candidates = [call for call in network_calls if call.hang_reasons]
+    ranked_hang_calls = sorted(hang_candidates, key=hang_severity, reverse=True)
 
-    print("\n===== SEARCH KEYWORD DIAGNOSTIC =====\n")
+    print("\n===== HAR HANG DIAGNOSTIC =====\n")
     print(f"HAR File: {results['file_path']}")
     print(f"Total Requests: {results['total_requests']}")
-    print(f"Classified Calls: {len(search_calls)}")
+    print(f"Classified Calls: {len(network_calls)}")
+    print(f"Failed Calls (status 0 or >=400): {results['failed_call_count']}")
+    print(f"Slow Calls (>=3000ms): {results['slow_call_count']}")
+    print(f"Stalled Calls (wait>=4000ms or blocked>=1000ms): {results['stalled_call_count']}")
+
+    print("\nCore Hang Findings:")
+    for finding in build_hang_core_findings(results, network_calls):
+        print(f"  - {finding}")
+
+    print("\nTop Hanging Requests:")
+    if ranked_hang_calls:
+        for call in ranked_hang_calls[:5]:
+            print(
+                "  "
+                f"severity={hang_severity(call):.1f} | {call.method} {call.status} {call.duration_ms:.0f}ms | "
+                f"{urlparse(call.url).path or '/'}"
+            )
+            print(f"     reasons: {', '.join(call.hang_reasons)}")
+    else:
+        print("  None")
 
     print("\nTop Domains:")
     if results["top_domains"]:
@@ -631,6 +713,13 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
     if results["category_counts"]:
         for category, count in results["category_counts"].most_common():
             print(f"  {category}: {count}")
+    else:
+        print("  None")
+
+    print("\nStandard Failure Signals:")
+    if results["failure_reason_counts"]:
+        for reason, count in results["failure_reason_counts"].most_common(8):
+            print(f"  {count}x  {reason}")
     else:
         print("  None")
 
@@ -650,17 +739,12 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         for endpoint, count in endpoints[:5]:
             print(f"  {count}x  {endpoint}")
 
-    if results["keywords"]:
-        print("\nKeyword Diagnostics:")
-        for line in summarize_keyword_diagnostics(search_calls, results["keywords"]):
-            print(f"  {line}")
-
-    print("\nDetailed Calls:")
-    if not search_calls:
+    print("\nLinear Request Timeline:")
+    if not network_calls:
         print("  None")
         return
 
-    for index, call in enumerate(search_calls[:limit], start=1):
+    for index, call in enumerate(network_calls[:limit], start=1):
         print(
             f"\n  [{index}] {call.method} {call.status} {call.duration_ms:.0f}ms  {call.url}"
         )
@@ -674,49 +758,33 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         print(f"      Request Snippet: {call.request_snippet}")
         if call.result_count is not None:
             print(f"      Result Count: {call.result_count}")
+        print(
+            "      Timings(ms): "
+            f"blocked={call.blocked_ms:.0f}, dns={call.dns_ms:.0f}, connect={call.connect_ms:.0f}, "
+            f"ssl={call.ssl_ms:.0f}, send={call.send_ms:.0f}, wait={call.wait_ms:.0f}, receive={call.receive_ms:.0f}"
+        )
+        if call.size_bytes > 0:
+            print(f"      Response Size: {call.size_bytes} bytes")
         if call.product_names:
             print(f"      Product Names: {', '.join(call.product_names[:4])}")
         if call.colors:
             print(f"      Colors: {', '.join(call.colors[:4])}")
         if call.response_snippet:
             print(f"      Response Snippet: {call.response_snippet}")
-
-        for keyword, signals in call.keyword_signals.items():
-            signal_parts = []
-            if signals["request_contains_keyword"]:
-                signal_parts.append("keyword in request")
-            if signals["response_contains_keyword"]:
-                signal_parts.append("keyword in response")
-            if signals["response_contains_slash_variant"]:
-                signal_parts.append("slash variant in response")
-            if signals["all_tokens_in_response"]:
-                signal_parts.append("all tokens present")
-            if signals["catalog_exact_hits"]:
-                signal_parts.append(f"catalog exact hits={signals['catalog_exact_hits']}")
-            if signals["catalog_token_hits"]:
-                signal_parts.append(f"catalog token hits={signals['catalog_token_hits']}")
-
-            if signal_parts:
-                print(f"      Signals for '{keyword}': {', '.join(signal_parts)}")
+        if call.hang_reasons:
+            print(f"      Hang Indicators: {', '.join(call.hang_reasons)}")
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Analyze HAR files for keyword and search endpoint diagnostics.",
+        description="Analyze HAR files linearly for app hang indicators and standard failure data.",
     )
     parser.add_argument("har_file", help="Path to the HAR file to inspect")
-    parser.add_argument(
-        "-k",
-        "--keyword",
-        action="append",
-        default=[],
-        help="Keyword to trace through search requests and responses. Repeat for multiple values.",
-    )
     parser.add_argument(
         "--limit",
         type=int,
         default=10,
-        help="Maximum number of detailed search calls to print.",
+        help="Maximum number of timeline calls to print.",
     )
     return parser
 
@@ -726,7 +794,7 @@ def main(argv: list[str]) -> int:
     args = parser.parse_args(argv)
 
     try:
-        results = analyze_har(args.har_file, dedupe(args.keyword))
+        results = analyze_har(args.har_file)
     except FileNotFoundError:
         print(f"File not found: {args.har_file}", file=sys.stderr)
         return 1
