@@ -23,21 +23,38 @@ WEIGHTS: dict[int, int] = {
 
 
 
-def load_events(path: Path) -> list[dict[str, Any]]:
-    with path.open("r", encoding="utf-8") as f:
-        payload = json.load(f)
+def load_events(path: Path, timeout_seconds: int = 30) -> list[dict[str, Any]]:
+    """Load events with timeout protection."""
+    import signal
+    
+    def timeout_handler(signum, frame):
+        raise TimeoutError(f"Event loading timed out after {timeout_seconds} seconds")
+    
+    try:
+        # Set timeout (Unix-like systems only)
+        if hasattr(signal, 'SIGALRM'):
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(timeout_seconds)
+        
+        with path.open("r", encoding="utf-8") as f:
+            payload = json.load(f)
 
-    if isinstance(payload, list):
-        return [e for e in payload if isinstance(e, dict)]
+        if isinstance(payload, list):
+            return [e for e in payload if isinstance(e, dict)]
 
-    if isinstance(payload, dict):
-        # Some exporters may wrap records in a top-level property.
-        for key in ("events", "data", "records"):
-            value = payload.get(key)
-            if isinstance(value, list):
-                return [e for e in value if isinstance(e, dict)]
+        if isinstance(payload, dict):
+            # Some exporters may wrap records in a top-level property.
+            for key in ("events", "data", "records"):
+                value = payload.get(key)
+                if isinstance(value, list):
+                    return [e for e in value if isinstance(e, dict)]
 
-    raise ValueError("Unsupported JSON format. Expected a list of event objects.")
+        raise ValueError("Unsupported JSON format. Expected a list of event objects.")
+    
+    finally:
+        # Cancel alarm (Unix-like systems)
+        if hasattr(signal, 'SIGALRM'):
+            signal.alarm(0)
 
 
 

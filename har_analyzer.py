@@ -1,12 +1,21 @@
 import argparse
 import base64
+import hashlib
 import json
+import logging
 import re
 import sys
-from collections import Counter
-from dataclasses import dataclass
+import time
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 SEARCH_HINTS = (
@@ -126,6 +135,40 @@ PRODUCT_NAME_KEYS = ("name", "productname", "displayname", "title")
 COLOR_KEYS = ("color", "colour", "colorname", "colourname")
 
 
+def normalize_url_for_dedup(url: str) -> str:
+    """Normalize URL for deduplication by removing tracking params and fragments."""
+    parsed = urlparse(url)
+    query_params = parse_qs(parsed.query)
+    
+    # Filter out common tracking/session parameters
+    exclude_keys = {'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+                    'sessionid', 'session_id', 'sid', '_ga', '_gid', 'fbclid', 'gclid',
+                    'msclkid', 'ref', 'referrer', 'timestamp', 'cachebuster'}
+    
+    filtered_params = {k: v for k, v in query_params.items() 
+                      if k.lower() not in exclude_keys}
+    
+    # Reconstruct normalized query string
+    normalized_query = '&'.join(
+        f"{k}={''.join(v)}" for k, v in sorted(filtered_params.items())
+    )
+    
+    # Return scheme + netloc + path + normalized query
+    normalized_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+    if normalized_query:
+        normalized_url += f"?{normalized_query}"
+    
+    return normalized_url
+
+
+def compute_request_hash(url: str, method: str, body_text: str) -> str:
+    """Compute a hash for request deduplication."""
+    normalized_url = normalize_url_for_dedup(url)
+    body_hash = hashlib.md5(body_text.encode()).hexdigest()[:8]
+    combined = f"{method.upper()}:{normalized_url}:{body_hash}"
+    return hashlib.md5(combined.encode()).hexdigest()[:12]
+
+
 @dataclass
 class NetworkCall:
     started_at: str
@@ -153,6 +196,9 @@ class NetworkCall:
     receive_ms: float
     size_bytes: int
     hang_reasons: list[str]
+    dedup_id: str = ""  # Hash for deduplication
+    occurrence_count: int = 1  # Number of duplicate requests merged
+    merged_timings: dict[str, list[float]] = field(default_factory=dict)  # For aggregated timing stats
 
 
 def load_har(file_path: str) -> dict[str, Any]:
@@ -517,19 +563,58 @@ def build_hang_core_findings(results: dict[str, Any], network_calls: list[Networ
 def analyze_har(file_path: str) -> dict[str, Any]:
     data = load_har(file_path)
     entries = data.get("log", {}).get("entries", [])
+    
+    logging.info(f"Processing HAR file with {len(entries)} total entries")
 
-    network_calls: list[NetworkCall] = []
+    # Phase 1: Initial processing with dedup tracking
+    request_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     status_counts = Counter()
     domain_counts = Counter()
     category_counts = Counter()
     failure_reason_counts = Counter()
     endpoint_counts_by_category: dict[str, Counter] = {}
     domain_counts_by_category: dict[str, Counter] = {}
+    
+    # Track duplicates for logging
+    dedup_map: dict[str, str] = {}  # Maps dedup_id to first occurrence URL
+    duplicate_count = 0
 
-    for entry in entries:
+    for entry_idx, entry in enumerate(entries):
         request = entry.get("request", {})
         response = entry.get("response", {})
-        url, request_snippet, request_terms, endpoint_score = extract_request_details(entry)
+        url, _, _, _ = extract_request_details(entry)
+        
+        # Compute dedup ID
+        body_text = request.get("postData", {}).get("text", "")
+        method = request.get("method", "GET")
+        dedup_id = compute_request_hash(url, method, body_text)
+        
+        # Track duplicates
+        if dedup_id not in dedup_map:
+            dedup_map[dedup_id] = url
+        else:
+            duplicate_count += 1
+        
+        # Group by dedup ID for later merging
+        request_groups[dedup_id].append({
+            "entry_index": entry_idx,
+            "entry": entry,
+            "dedup_id": dedup_id,
+            "url": url,
+            "method": method
+        })
+    
+    logging.info(f"Found {duplicate_count} duplicate requests ({len(request_groups)} unique endpoints)")
+
+    # Phase 2: Process unique requests, merging duplicates
+    network_calls: list[NetworkCall] = []
+    
+    for dedup_id, request_entries in request_groups.items():
+        # Use first occurrence for analysis
+        first_entry = request_entries[0]["entry"]
+        request = first_entry.get("request", {})
+        response = first_entry.get("response", {})
+        url, request_snippet, request_terms, endpoint_score = extract_request_details(first_entry)
         domain = urlparse(url).netloc or "unknown"
 
         domain_counts[domain] += 1
@@ -540,7 +625,7 @@ def analyze_har(file_path: str) -> dict[str, Any]:
         response_json = parse_json_like(response_text)
         body_json = parse_json_like(request.get("postData", {}).get("text", ""))
         graphql_operation = parse_graphql_operation(body_json)
-        timings = entry.get("timings", {}) if isinstance(entry.get("timings", {}), dict) else {}
+        timings = first_entry.get("timings", {}) if isinstance(first_entry.get("timings", {}), dict) else {}
         wait_ms = safe_timing(timings, "wait")
         blocked_ms = safe_timing(timings, "blocked")
         dns_ms = safe_timing(timings, "dns")
@@ -569,7 +654,7 @@ def analyze_har(file_path: str) -> dict[str, Any]:
 
         hang_reasons = describe_hang_reasons(
             status,
-            float(entry.get("time", 0) or 0),
+            float(first_entry.get("time", 0) or 0),
             wait_ms,
             blocked_ms,
             connect_ms,
@@ -605,6 +690,7 @@ def analyze_har(file_path: str) -> dict[str, Any]:
                 receive_ms=0.0,
                 size_bytes=0,
                 hang_reasons=[],
+                dedup_id=dedup_id,
             )
         )
         category_counts[category] += 1
@@ -617,12 +703,25 @@ def analyze_har(file_path: str) -> dict[str, Any]:
         if not should_include_call(category):
             continue
 
+        # Aggregate timing data from all duplicate requests
+        merged_timings = defaultdict(list)
+        for req_entry in request_entries:
+            entry_timings = req_entry["entry"].get("timings", {})
+            if isinstance(entry_timings, dict):
+                merged_timings["wait"].append(safe_timing(entry_timings, "wait"))
+                merged_timings["blocked"].append(safe_timing(entry_timings, "blocked"))
+                merged_timings["dns"].append(safe_timing(entry_timings, "dns"))
+                merged_timings["connect"].append(safe_timing(entry_timings, "connect"))
+                merged_timings["ssl"].append(safe_timing(entry_timings, "ssl"))
+                merged_timings["send"].append(safe_timing(entry_timings, "send"))
+                merged_timings["receive"].append(safe_timing(entry_timings, "receive"))
+
         network_calls.append(
             NetworkCall(
-                started_at=entry.get("startedDateTime", ""),
+                started_at=first_entry.get("startedDateTime", ""),
                 method=request.get("method", "GET"),
                 status=status,
-                duration_ms=float(entry.get("time", 0) or 0),
+                duration_ms=float(first_entry.get("time", 0) or 0),
                 url=url,
                 domain=domain,
                 category=category,
@@ -644,6 +743,9 @@ def analyze_har(file_path: str) -> dict[str, Any]:
                 receive_ms=receive_ms,
                 size_bytes=size_bytes,
                 hang_reasons=hang_reasons,
+                dedup_id=dedup_id,
+                occurrence_count=len(request_entries),
+                merged_timings=dict(merged_timings),
             )
         )
 
@@ -654,6 +756,8 @@ def analyze_har(file_path: str) -> dict[str, Any]:
     return {
         "file_path": file_path,
         "total_requests": len(entries),
+        "unique_endpoints": len(network_calls),
+        "duplicate_requests": duplicate_count,
         "top_domains": domain_counts.most_common(5),
         "status_counts": status_counts,
         "category_counts": category_counts,
@@ -680,7 +784,11 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
 
     print("\n===== HAR HANG DIAGNOSTIC =====\n")
     print(f"HAR File: {results['file_path']}")
-    print(f"Total Requests: {results['total_requests']}")
+    print(f"Total Requests in HAR: {results['total_requests']}")
+    print(f"Unique Endpoints (after dedup): {results['unique_endpoints']}")
+    print(f"Duplicate Requests Detected: {results['duplicate_requests']}")
+    dedup_reduction = (results['duplicate_requests'] / max(results['total_requests'], 1)) * 100
+    print(f"Redundancy Eliminated: {dedup_reduction:.1f}% reduction")
     print(f"Classified Calls: {len(network_calls)}")
     print(f"Failed Calls (status 0 or >=400): {results['failed_call_count']}")
     print(f"Slow Calls (>=3000ms): {results['slow_call_count']}")
@@ -693,10 +801,11 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
     print("\nTop Hanging Requests:")
     if ranked_hang_calls:
         for call in ranked_hang_calls[:5]:
+            occ_str = f" (×{call.occurrence_count})" if call.occurrence_count > 1 else ""
             print(
                 "  "
                 f"severity={hang_severity(call):.1f} | {call.method} {call.status} {call.duration_ms:.0f}ms | "
-                f"{urlparse(call.url).path or '/'}"
+                f"{urlparse(call.url).path or '/'}{occ_str}"
             )
             print(f"     reasons: {', '.join(call.hang_reasons)}")
     else:
@@ -745,8 +854,9 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         return
 
     for index, call in enumerate(network_calls[:limit], start=1):
+        occ_str = f" (×{call.occurrence_count})" if call.occurrence_count > 1 else ""
         print(
-            f"\n  [{index}] {call.method} {call.status} {call.duration_ms:.0f}ms  {call.url}"
+            f"\n  [{index}] {call.method} {call.status} {call.duration_ms:.0f}ms  {call.url}{occ_str}"
         )
         print(
             f"      Classification: {call.category} | {call.confidence} confidence | score={call.endpoint_score}"
@@ -758,11 +868,26 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         print(f"      Request Snippet: {call.request_snippet}")
         if call.result_count is not None:
             print(f"      Result Count: {call.result_count}")
-        print(
-            "      Timings(ms): "
-            f"blocked={call.blocked_ms:.0f}, dns={call.dns_ms:.0f}, connect={call.connect_ms:.0f}, "
-            f"ssl={call.ssl_ms:.0f}, send={call.send_ms:.0f}, wait={call.wait_ms:.0f}, receive={call.receive_ms:.0f}"
-        )
+        
+        # Display aggregate timing data if duplicates exist
+        if call.occurrence_count > 1 and call.merged_timings:
+            print(
+                "      Timings(ms) - avg: "
+                f"blocked={sum(call.merged_timings.get('blocked', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"dns={sum(call.merged_timings.get('dns', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"connect={sum(call.merged_timings.get('connect', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"ssl={sum(call.merged_timings.get('ssl', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"send={sum(call.merged_timings.get('send', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"wait={sum(call.merged_timings.get('wait', [0]))/max(call.occurrence_count, 1):.0f}, "
+                f"receive={sum(call.merged_timings.get('receive', [0]))/max(call.occurrence_count, 1):.0f}"
+            )
+        else:
+            print(
+                "      Timings(ms): "
+                f"blocked={call.blocked_ms:.0f}, dns={call.dns_ms:.0f}, connect={call.connect_ms:.0f}, "
+                f"ssl={call.ssl_ms:.0f}, send={call.send_ms:.0f}, wait={call.wait_ms:.0f}, receive={call.receive_ms:.0f}"
+            )
+        
         if call.size_bytes > 0:
             print(f"      Response Size: {call.size_bytes} bytes")
         if call.product_names:
@@ -773,6 +898,8 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
             print(f"      Response Snippet: {call.response_snippet}")
         if call.hang_reasons:
             print(f"      Hang Indicators: {', '.join(call.hang_reasons)}")
+        if call.occurrence_count > 1:
+            print(f"      ⚠️  DUPLICATE: This request appeared {call.occurrence_count} times in the capture")
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
