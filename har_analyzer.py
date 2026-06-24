@@ -3,6 +3,7 @@ import base64
 import hashlib
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -133,6 +134,45 @@ RESULT_KEYS = (
 PRODUCT_LIST_KEYS = ("products", "items", "results", "hits", "records")
 PRODUCT_NAME_KEYS = ("name", "productname", "displayname", "title")
 COLOR_KEYS = ("color", "colour", "colorname", "colourname")
+
+
+ANSI_RESET = "\033[0m"
+ANSI_BOLD = "\033[1m"
+ANSI_DIM = "\033[2m"
+ANSI_RED = "\033[31m"
+ANSI_GREEN = "\033[32m"
+ANSI_YELLOW = "\033[33m"
+ANSI_BLUE = "\033[34m"
+ANSI_MAGENTA = "\033[35m"
+ANSI_CYAN = "\033[36m"
+
+
+def supports_color() -> bool:
+    if os.getenv("NO_COLOR") is not None:
+        return False
+    return hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+
+
+def style_text(text: str, *styles: str) -> str:
+    if not supports_color() or not styles:
+        return text
+    return "".join(styles) + text + ANSI_RESET
+
+
+def status_style(status: int) -> str:
+    if status == 0 or status >= 500:
+        return ANSI_RED
+    if status >= 400:
+        return ANSI_YELLOW
+    return ANSI_GREEN
+
+
+def severity_style(severity: float) -> str:
+    if severity >= 25:
+        return ANSI_RED
+    if severity >= 14:
+        return ANSI_YELLOW
+    return ANSI_GREEN
 
 
 def normalize_url_for_dedup(url: str) -> str:
@@ -782,53 +822,56 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
     hang_candidates = [call for call in network_calls if call.hang_reasons]
     ranked_hang_calls = sorted(hang_candidates, key=hang_severity, reverse=True)
 
-    print("\n===== HAR HANG DIAGNOSTIC =====\n")
-    print(f"HAR File: {results['file_path']}")
-    print(f"Total Requests in HAR: {results['total_requests']}")
-    print(f"Unique Endpoints (after dedup): {results['unique_endpoints']}")
-    print(f"Duplicate Requests Detected: {results['duplicate_requests']}")
+    print("\n" + style_text("===== HAR HANG DIAGNOSTIC =====", ANSI_BOLD, ANSI_CYAN) + "\n")
+    print(style_text(f"HAR File: {results['file_path']}", ANSI_DIM))
+    print(f"Total Requests in HAR: {style_text(str(results['total_requests']), ANSI_BOLD)}")
+    print(f"Unique Endpoints (after dedup): {style_text(str(results['unique_endpoints']), ANSI_BOLD)}")
+    print(f"Duplicate Requests Detected: {style_text(str(results['duplicate_requests']), ANSI_BOLD, ANSI_YELLOW)}")
     dedup_reduction = (results['duplicate_requests'] / max(results['total_requests'], 1)) * 100
-    print(f"Redundancy Eliminated: {dedup_reduction:.1f}% reduction")
-    print(f"Classified Calls: {len(network_calls)}")
-    print(f"Failed Calls (status 0 or >=400): {results['failed_call_count']}")
-    print(f"Slow Calls (>=3000ms): {results['slow_call_count']}")
-    print(f"Stalled Calls (wait>=4000ms or blocked>=1000ms): {results['stalled_call_count']}")
+    print(f"Redundancy Eliminated: {style_text(f'{dedup_reduction:.1f}% reduction', ANSI_MAGENTA)}")
+    print(f"Classified Calls: {style_text(str(len(network_calls)), ANSI_BOLD)}")
+    print(f"Failed Calls (status 0 or >=400): {style_text(str(results['failed_call_count']), ANSI_BOLD, ANSI_RED)}")
+    print(f"Slow Calls (>=3000ms): {style_text(str(results['slow_call_count']), ANSI_BOLD, ANSI_YELLOW)}")
+    print(f"Stalled Calls (wait>=4000ms or blocked>=1000ms): {style_text(str(results['stalled_call_count']), ANSI_BOLD, ANSI_YELLOW)}")
 
-    print("\nCore Hang Findings:")
+    print("\n" + style_text("Core Hang Findings:", ANSI_BOLD, ANSI_BLUE))
     for finding in build_hang_core_findings(results, network_calls):
         print(f"  - {finding}")
 
-    print("\nTop Hanging Requests:")
+    print("\n" + style_text("Top Hanging Requests:", ANSI_BOLD, ANSI_BLUE))
     if ranked_hang_calls:
         for call in ranked_hang_calls[:5]:
             occ_str = f" (×{call.occurrence_count})" if call.occurrence_count > 1 else ""
+            severity_value = hang_severity(call)
             print(
                 "  "
-                f"severity={hang_severity(call):.1f} | {call.method} {call.status} {call.duration_ms:.0f}ms | "
+                f"severity={style_text(f'{severity_value:.1f}', severity_style(severity_value), ANSI_BOLD)} | "
+                f"{call.method} {style_text(str(call.status), status_style(call.status), ANSI_BOLD)} "
+                f"{call.duration_ms:.0f}ms | "
                 f"{urlparse(call.url).path or '/'}{occ_str}"
             )
             print(f"     reasons: {', '.join(call.hang_reasons)}")
     else:
         print("  None")
 
-    print("\nTop Domains:")
+    print("\n" + style_text("Top Domains:", ANSI_BOLD, ANSI_BLUE))
     if results["top_domains"]:
         for domain, count in results["top_domains"]:
-            print(f"  {domain}: {count}")
+            print(f"  {domain}: {style_text(str(count), ANSI_BOLD)}")
     else:
         print("  None")
 
-    print("\nCategory Summary:")
+    print("\n" + style_text("Category Summary:", ANSI_BOLD, ANSI_BLUE))
     if results["category_counts"]:
         for category, count in results["category_counts"].most_common():
-            print(f"  {category}: {count}")
+            print(f"  {category}: {style_text(str(count), ANSI_BOLD)}")
     else:
         print("  None")
 
-    print("\nStandard Failure Signals:")
+    print("\n" + style_text("Standard Failure Signals:", ANSI_BOLD, ANSI_BLUE))
     if results["failure_reason_counts"]:
         for reason, count in results["failure_reason_counts"].most_common(8):
-            print(f"  {count}x  {reason}")
+            print(f"  {style_text(f'{count}x', ANSI_BOLD, ANSI_RED)}  {reason}")
     else:
         print("  None")
 
@@ -844,11 +887,11 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         endpoints = results["top_endpoints_by_category"].get(category, [])
         if not endpoints:
             continue
-        print(f"\nTop {category} Endpoints:")
+        print("\n" + style_text(f"Top {category} Endpoints:", ANSI_BOLD, ANSI_BLUE))
         for endpoint, count in endpoints[:5]:
-            print(f"  {count}x  {endpoint}")
+            print(f"  {style_text(f'{count}x', ANSI_BOLD)}  {endpoint}")
 
-    print("\nLinear Request Timeline:")
+    print("\n" + style_text("Linear Request Timeline:", ANSI_BOLD, ANSI_BLUE))
     if not network_calls:
         print("  None")
         return
@@ -856,7 +899,9 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
     for index, call in enumerate(network_calls[:limit], start=1):
         occ_str = f" (×{call.occurrence_count})" if call.occurrence_count > 1 else ""
         print(
-            f"\n  [{index}] {call.method} {call.status} {call.duration_ms:.0f}ms  {call.url}{occ_str}"
+            f"\n  {style_text(f'[{index}]', ANSI_CYAN, ANSI_BOLD)} {call.method} "
+            f"{style_text(str(call.status), status_style(call.status), ANSI_BOLD)} "
+            f"{call.duration_ms:.0f}ms  {call.url}{occ_str}"
         )
         print(
             f"      Classification: {call.category} | {call.confidence} confidence | score={call.endpoint_score}"
@@ -897,9 +942,16 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         if call.response_snippet:
             print(f"      Response Snippet: {call.response_snippet}")
         if call.hang_reasons:
-            print(f"      Hang Indicators: {', '.join(call.hang_reasons)}")
+            print(f"      {style_text('Hang Indicators:', ANSI_BOLD, ANSI_YELLOW)} {', '.join(call.hang_reasons)}")
         if call.occurrence_count > 1:
-            print(f"      ⚠️  DUPLICATE: This request appeared {call.occurrence_count} times in the capture")
+            print(
+                "      "
+                + style_text(
+                    f"DUPLICATE: This request appeared {call.occurrence_count} times in the capture",
+                    ANSI_BOLD,
+                    ANSI_YELLOW,
+                )
+            )
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -920,10 +972,25 @@ def main(argv: list[str]) -> int:
     parser = build_argument_parser()
     args = parser.parse_args(argv)
 
+    har_path = args.har_file
+    absolute_path = os.path.abspath(har_path)
+    
     try:
-        results = analyze_har(args.har_file)
+        results = analyze_har(har_path)
     except FileNotFoundError:
-        print(f"File not found: {args.har_file}", file=sys.stderr)
+        print(f"File not found: {har_path}", file=sys.stderr)
+        print(f"  Absolute path tried: {absolute_path}", file=sys.stderr)
+        print(f"  Current working directory: {os.getcwd()}", file=sys.stderr)
+        
+        # List .har files in current directory
+        har_files = [f for f in os.listdir(".") if f.endswith(".har")]
+        if har_files:
+            print(f"  .HAR files in current directory:", file=sys.stderr)
+            for f in har_files:
+                print(f"    - {f}", file=sys.stderr)
+        else:
+            print(f"  No .HAR files found in current directory", file=sys.stderr)
+        
         return 1
     except json.JSONDecodeError as exc:
         print(f"Invalid HAR JSON: {exc}", file=sys.stderr)
