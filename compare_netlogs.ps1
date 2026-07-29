@@ -1,35 +1,40 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$FirstNetLogPath,
+    [string]$NetLogPath,
 
     [Parameter(Mandatory = $true)]
-    [string]$SecondNetLogPath,
+    [string]$HarPath,
 
-    [string]$FirstLabel = "Capture A",
-    [string]$SecondLabel = "Capture B",
+    [string]$NetLogLabel = "NetLog",
+    [string]$HarLabel = "HAR",
     [int]$Limit = 25,
-    [string]$OutputPath = ".\netlog_compare.json"
+    [string]$OutputPath = ".\netlog_har_compare.json"
 )
 
 $ErrorActionPreference = "Stop"
 
 $scriptRoot = Split-Path -Path $MyInvocation.MyCommand.Path -Parent
 $viewerPath = Join-Path -Path $scriptRoot -ChildPath "netlog_viewer.py"
+$harAnalyzerPath = Join-Path -Path $scriptRoot -ChildPath "har_analyzer.py"
 
 if (-not (Test-Path -Path $viewerPath)) {
     throw "NetLog viewer not found: $viewerPath"
 }
 
-if (-not (Test-Path -Path $FirstNetLogPath)) {
-    throw "First NetLog file not found: $FirstNetLogPath"
+if (-not (Test-Path -Path $harAnalyzerPath)) {
+    throw "HAR analyzer not found: $harAnalyzerPath"
 }
 
-if (-not (Test-Path -Path $SecondNetLogPath)) {
-    throw "Second NetLog file not found: $SecondNetLogPath"
+if (-not (Test-Path -Path $NetLogPath)) {
+    throw "NetLog file not found: $NetLogPath"
 }
 
-$tempFirst = Join-Path -Path $env:TEMP -ChildPath ("netlog_first_" + [guid]::NewGuid().ToString("N") + ".json")
-$tempSecond = Join-Path -Path $env:TEMP -ChildPath ("netlog_second_" + [guid]::NewGuid().ToString("N") + ".json")
+if (-not (Test-Path -Path $HarPath)) {
+    throw "HAR file not found: $HarPath"
+}
+
+$tempNetLog = Join-Path -Path $env:TEMP -ChildPath ("netlog_summary_" + [guid]::NewGuid().ToString("N") + ".json")
+$tempHar = Join-Path -Path $env:TEMP -ChildPath ("har_summary_" + [guid]::NewGuid().ToString("N") + ".json")
 
 function Invoke-NetLogViewer {
     param(
@@ -58,6 +63,33 @@ function Invoke-NetLogViewer {
     return (Get-Content -Path $SummaryPath -Raw | ConvertFrom-Json)
 }
 
+function Invoke-HarAnalyzer {
+    param(
+        [string]$InputPath,
+        [string]$SummaryPath
+    )
+
+    $arguments = @(
+        ".\har_analyzer.py",
+        $InputPath,
+        "--limit", $Limit,
+        "--json-output", $SummaryPath
+    )
+
+    Push-Location $scriptRoot
+    try {
+        py -3 @arguments
+        if ($LASTEXITCODE -ne 0) {
+            throw "har_analyzer.py failed for: $InputPath"
+        }
+    }
+    finally {
+        Pop-Location
+    }
+
+    return (Get-Content -Path $SummaryPath -Raw | ConvertFrom-Json)
+}
+
 function Get-CounterFromObject {
     param([object]$ObjectValue)
 
@@ -75,28 +107,28 @@ function Get-CounterFromObject {
 
 function Get-TopDifferenceRows {
     param(
-        [hashtable]$FirstCounts,
-        [hashtable]$SecondCounts,
+        [hashtable]$NetLogCounts,
+        [hashtable]$HarCounts,
         [int]$Top = 8
     )
 
     $allKeys = New-Object System.Collections.Generic.HashSet[string]
-    foreach ($key in $FirstCounts.Keys) { [void]$allKeys.Add($key) }
-    foreach ($key in $SecondCounts.Keys) { [void]$allKeys.Add($key) }
+    foreach ($key in $NetLogCounts.Keys) { [void]$allKeys.Add($key) }
+    foreach ($key in $HarCounts.Keys) { [void]$allKeys.Add($key) }
 
     $rows = foreach ($key in $allKeys) {
-        $firstValue = 0
-        $secondValue = 0
+        $netlogValue = 0
+        $harValue = 0
 
-        if ($FirstCounts.ContainsKey($key)) { $firstValue = [int]$FirstCounts[$key] }
-        if ($SecondCounts.ContainsKey($key)) { $secondValue = [int]$SecondCounts[$key] }
+        if ($NetLogCounts.ContainsKey($key)) { $netlogValue = [int]$NetLogCounts[$key] }
+        if ($HarCounts.ContainsKey($key)) { $harValue = [int]$HarCounts[$key] }
 
         [pscustomobject]@{
             Error = $key
-            First = $firstValue
-            Second = $secondValue
-            Delta = ($firstValue - $secondValue)
-            AbsDelta = [Math]::Abs($firstValue - $secondValue)
+            NetLog = $netlogValue
+            HAR = $harValue
+            Delta = ($netlogValue - $harValue)
+            AbsDelta = [Math]::Abs($netlogValue - $harValue)
         }
     }
 
@@ -105,91 +137,127 @@ function Get-TopDifferenceRows {
         Select-Object -First $Top
 }
 
+function Normalize-Host {
+    param([string]$Value)
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return ""
+    }
+
+    $text = $Value.Trim().ToLowerInvariant()
+    if ($text.Contains(":")) {
+        return $text.Split(":")[0]
+    }
+    return $text
+}
+
 function Resolve-OverallRecommendation {
     param(
-        [int]$FirstScore,
-        [int]$SecondScore,
-        [string]$FirstLikelihood,
-        [string]$SecondLikelihood,
-        [string]$FirstLabel,
-        [string]$SecondLabel
+        [int]$NetLogScore,
+        [double]$HarFailureRate,
+        [double]$HarStallRate,
+        [int]$SharedHostCount
     )
 
-    $scoreGap = [Math]::Abs($FirstScore - $SecondScore)
-
-    if ($FirstScore -ge 65 -and $SecondScore -lt 40 -and $scoreGap -ge 20) {
-        return "$FirstLabel looks browser-local compared to $SecondLabel; prioritize reset/reinstall for $FirstLabel environment."
+    if ($NetLogScore -ge 65 -and $HarFailureRate -lt 0.10 -and $HarStallRate -lt 0.10) {
+        return "Strong browser-local signal: NetLog has high local signature while HAR has low failure/stall rates. Prioritize browser reset/profile cleanup/reinstall testing."
     }
 
-    if ($SecondScore -ge 65 -and $FirstScore -lt 40 -and $scoreGap -ge 20) {
-        return "$SecondLabel looks browser-local compared to $FirstLabel; prioritize reset/reinstall for $SecondLabel environment."
+    if ($NetLogScore -lt 40 -and ($HarFailureRate -ge 0.20 -or $HarStallRate -ge 0.20)) {
+        return "Strong service/network path signal: HAR shows meaningful failures/stalls while NetLog local signatures are weak. Prioritize upstream service/network triage."
     }
 
-    if ($FirstScore -ge 40 -and $SecondScore -ge 40) {
-        return "Both captures show meaningful local signatures. Run clean-profile tests before reinstalling either browser."
+    if ($NetLogScore -ge 50 -and ($HarFailureRate -ge 0.15 -or $HarStallRate -ge 0.15)) {
+        return "Mixed signal: both local browser signatures and HAR-side request failures are present. Run clean-profile repro and backend latency/error checks in parallel."
     }
 
-    if ($FirstScore -lt 40 -and $SecondScore -lt 40) {
-        return "Neither capture strongly suggests browser reinstall. Focus on shared network, DNS, proxy, or upstream service factors."
+    if ($SharedHostCount -ge 3) {
+        return "Cross-source overlap found on multiple hosts. Focus first on shared host/service health and edge/network path consistency."
     }
 
-    return "Mixed signal. Validate with one controlled repro per browser using clean profiles and no extensions."
+    return "Moderate signal. Gather one more synchronized NetLog+HAR repro and compare host-level overlap plus request timing outliers."
+}
+
+function Resolve-ScoreColor {
+    param([int]$Score)
+
+    if ($Score -ge 80) { return "Red" }
+    if ($Score -ge 65) { return "Magenta" }
+    if ($Score -ge 50) { return "Yellow" }
+    if ($Score -ge 35) { return "Cyan" }
+    if ($Score -ge 20) { return "Green" }
+    return "White"
 }
 
 try {
-    Write-Host "`n===== NetLog Comparison =====" -ForegroundColor Cyan
-    Write-Host "First:  $FirstLabel -> $FirstNetLogPath"
-    Write-Host "Second: $SecondLabel -> $SecondNetLogPath"
+    Write-Host "`n===== NetLog vs HAR Comparison =====" -ForegroundColor Cyan
+    Write-Host "NetLog: $NetLogLabel -> $NetLogPath"
+    Write-Host "HAR:    $HarLabel -> $HarPath"
 
-    $firstSummary = Invoke-NetLogViewer -InputPath $FirstNetLogPath -SummaryPath $tempFirst
-    $secondSummary = Invoke-NetLogViewer -InputPath $SecondNetLogPath -SummaryPath $tempSecond
+    $netlogSummary = Invoke-NetLogViewer -InputPath $NetLogPath -SummaryPath $tempNetLog
+    $harSummary = Invoke-HarAnalyzer -InputPath $HarPath -SummaryPath $tempHar
 
-    $firstAssessment = $firstSummary.assessment
-    $secondAssessment = $secondSummary.assessment
+    $netlogAssessment = $netlogSummary.assessment
 
-    $firstErrors = Get-CounterFromObject -ObjectValue $firstSummary.error_counts
-    $secondErrors = Get-CounterFromObject -ObjectValue $secondSummary.error_counts
+    $netlogErrors = Get-CounterFromObject -ObjectValue $netlogSummary.error_counts
+    $harFailureReasons = Get-CounterFromObject -ObjectValue $harSummary.failure_reason_counts
 
-    $topDiff = Get-TopDifferenceRows -FirstCounts $firstErrors -SecondCounts $secondErrors -Top 10
+    $topDiff = Get-TopDifferenceRows -NetLogCounts $netlogErrors -HarCounts $harFailureReasons -Top 10
 
-    $firstAffected = @($firstSummary.affected_hosts)
-    $secondAffected = @($secondSummary.affected_hosts)
+    $netlogAffected = @($netlogSummary.affected_hosts)
+    $harTopDomains = @($harSummary.top_domains | ForEach-Object { [string]$_.domain })
 
-    $commonFailingTargets = @($firstAffected | Where-Object { $secondAffected -contains $_ })
+    $harDomainSet = New-Object System.Collections.Generic.HashSet[string]
+    foreach ($domain in $harTopDomains) {
+        $normalized = Normalize-Host -Value $domain
+        if ($normalized) { [void]$harDomainSet.Add($normalized) }
+    }
+
+    $commonFailingTargets = @(
+        $netlogAffected |
+            ForEach-Object { Normalize-Host -Value ([string]$_) } |
+            Where-Object { $_ -and $harDomainSet.Contains($_) } |
+            Sort-Object -Unique
+    )
+
+    $harTotalRequests = [Math]::Max([int]$harSummary.total_requests, 1)
+    $harFailureRate = [double]$harSummary.failed_call_count / $harTotalRequests
+    $harStallRate = [double]$harSummary.stalled_call_count / $harTotalRequests
+    $scoreColor = Resolve-ScoreColor -Score ([int]$netlogAssessment.score)
 
     $overall = Resolve-OverallRecommendation `
-        -FirstScore ([int]$firstAssessment.score) `
-        -SecondScore ([int]$secondAssessment.score) `
-        -FirstLikelihood ([string]$firstAssessment.likelihood) `
-        -SecondLikelihood ([string]$secondAssessment.likelihood) `
-        -FirstLabel $FirstLabel `
-        -SecondLabel $SecondLabel
+        -NetLogScore ([int]$netlogAssessment.score) `
+        -HarFailureRate $harFailureRate `
+        -HarStallRate $harStallRate `
+        -SharedHostCount $commonFailingTargets.Count
 
     Write-Host ""
     Write-Host "--- Side-by-Side ---" -ForegroundColor Yellow
-    Write-Host "$FirstLabel"
-    Write-Host "  Browser Hint: $($firstSummary.browser_hint)"
-    Write-Host "  Score: $($firstAssessment.score)/100"
-    Write-Host "  Likelihood: $($firstAssessment.likelihood)"
-    Write-Host "  Failures: $($firstAssessment.total_failures)"
-    Write-Host "  Affected Hosts: $($firstAssessment.affected_host_count)"
+    Write-Host "$NetLogLabel"
+    Write-Host "  Browser Hint: $($netlogSummary.browser_hint)"
+    Write-Host "  Local Reinstall Signal Score: $($netlogAssessment.score)/100" -ForegroundColor $scoreColor
+    Write-Host "  Likelihood: $($netlogAssessment.likelihood)"
+    Write-Host "  NetLog Failure Events: $($netlogAssessment.total_failures)"
+    Write-Host "  Affected Hosts: $($netlogAssessment.affected_host_count)"
 
     Write-Host ""
-    Write-Host "$SecondLabel"
-    Write-Host "  Browser Hint: $($secondSummary.browser_hint)"
-    Write-Host "  Score: $($secondAssessment.score)/100"
-    Write-Host "  Likelihood: $($secondAssessment.likelihood)"
-    Write-Host "  Failures: $($secondAssessment.total_failures)"
-    Write-Host "  Affected Hosts: $($secondAssessment.affected_host_count)"
+    Write-Host "$HarLabel"
+    Write-Host "  Total Requests: $($harSummary.total_requests)"
+    Write-Host "  Unique Endpoints: $($harSummary.unique_endpoints)"
+    Write-Host "  Failed Calls: $($harSummary.failed_call_count)"
+    Write-Host "  Slow Calls: $($harSummary.slow_call_count)"
+    Write-Host "  Stalled Calls: $($harSummary.stalled_call_count)"
+    Write-Host "  Failure Rate: {0:P1}" -f $harFailureRate
+    Write-Host "  Stall Rate: {0:P1}" -f $harStallRate
 
     Write-Host ""
-    Write-Host "--- Error Delta (Top 10 by absolute difference) ---" -ForegroundColor Yellow
+    Write-Host "--- NetLog Error vs HAR Failure-Signal Delta (Top 10) ---" -ForegroundColor Yellow
     if ($topDiff.Count -eq 0) {
         Write-Host "  No error differences found"
     }
     else {
         foreach ($row in $topDiff) {
-            Write-Host "  $($row.Error): $FirstLabel=$($row.First), $SecondLabel=$($row.Second), delta=$($row.Delta)"
+            Write-Host "  $($row.Error): NetLog=$($row.NetLog), HAR=$($row.HAR), delta=$($row.Delta)"
         }
     }
 
@@ -208,19 +276,21 @@ try {
 
     $result = [pscustomobject]@{
         generated_at = (Get-Date).ToString("o")
-        first_label = $FirstLabel
-        second_label = $SecondLabel
-        first_file = (Resolve-Path -Path $FirstNetLogPath).Path
-        second_file = (Resolve-Path -Path $SecondNetLogPath).Path
-        first = $firstSummary
-        second = $secondSummary
+        netlog_label = $NetLogLabel
+        har_label = $HarLabel
+        netlog_file = (Resolve-Path -Path $NetLogPath).Path
+        har_file = (Resolve-Path -Path $HarPath).Path
+        netlog = $netlogSummary
+        har = $harSummary
+        har_failure_rate = $harFailureRate
+        har_stall_rate = $harStallRate
         shared_failing_hosts = ($commonFailingTargets | Sort-Object -Unique)
         overall_recommendation = $overall
         error_delta = @($topDiff | ForEach-Object {
             [pscustomobject]@{
                 error = $_.Error
-                first = $_.First
-                second = $_.Second
+                netlog = $_.NetLog
+                har = $_.HAR
                 delta = $_.Delta
             }
         })
@@ -231,6 +301,6 @@ try {
     Write-Host "Comparison JSON written to: $OutputPath" -ForegroundColor Green
 }
 finally {
-    Remove-Item -Path $tempFirst -ErrorAction SilentlyContinue
-    Remove-Item -Path $tempSecond -ErrorAction SilentlyContinue
+    Remove-Item -Path $tempNetLog -ErrorAction SilentlyContinue
+    Remove-Item -Path $tempHar -ErrorAction SilentlyContinue
 }

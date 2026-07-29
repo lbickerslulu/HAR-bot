@@ -9,6 +9,7 @@ import sys
 import time
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -965,7 +966,49 @@ def build_argument_parser() -> argparse.ArgumentParser:
         default=10,
         help="Maximum number of timeline calls to print.",
     )
+    parser.add_argument(
+        "--json-output",
+        help="Optional path to write a structured JSON summary",
+    )
     return parser
+
+
+def write_json_summary(results: dict[str, Any], output_path: str, limit: int) -> None:
+    network_calls: list[NetworkCall] = results["network_calls"]
+
+    payload = {
+        "file_path": results["file_path"],
+        "total_requests": results["total_requests"],
+        "unique_endpoints": results["unique_endpoints"],
+        "duplicate_requests": results["duplicate_requests"],
+        "failed_call_count": results["failed_call_count"],
+        "slow_call_count": results["slow_call_count"],
+        "stalled_call_count": results["stalled_call_count"],
+        "top_domains": [
+            {"domain": domain, "count": count}
+            for domain, count in results["top_domains"]
+        ],
+        "category_counts": dict(results["category_counts"]),
+        "failure_reason_counts": dict(results["failure_reason_counts"]),
+        "timeline": [
+            {
+                "started_at": call.started_at,
+                "method": call.method,
+                "status": call.status,
+                "duration_ms": call.duration_ms,
+                "url": call.url,
+                "domain": call.domain,
+                "category": call.category,
+                "wait_ms": call.wait_ms,
+                "blocked_ms": call.blocked_ms,
+                "occurrence_count": call.occurrence_count,
+                "hang_reasons": call.hang_reasons,
+            }
+            for call in network_calls[: max(limit, 0)]
+        ],
+    }
+
+    Path(output_path).write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def main(argv: list[str]) -> int:
@@ -997,6 +1040,11 @@ def main(argv: list[str]) -> int:
         return 1
 
     print_summary(results, max(args.limit, 1))
+
+    if args.json_output:
+        write_json_summary(results, args.json_output, max(args.limit, 0))
+        print(f"\nJSON summary written to: {args.json_output}")
+
     return 0
 
 

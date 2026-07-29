@@ -35,7 +35,7 @@ The analyzer now intelligently detects and merges duplicate requests:
 
 - Run `har_analyzer.py` when you have a browser/network `.har` capture and want to diagnose app hangs, slow requests, or failing endpoints.
 - Run `netlog_viewer.py` when you have a Chrome/Edge NetLog JSON export and want to identify browser-local vs network-path failures.
-- Run `compare_netlogs.ps1` when you want a side-by-side Chrome vs Edge NetLog comparison and a single recommendation.
+- Run `compare_netlogs.ps1` when you want a single NetLog-vs-HAR comparison and one consolidated recommendation.
 - Run `run_hardware_pipeline.ps1` when you suspect Windows device instability and want to analyze System Event IDs from the last N days.
 
 ## Usage
@@ -43,6 +43,9 @@ The analyzer now intelligently detects and merges duplicate requests:
 ### HAR Analysis (with deduplication)
 ```powershell
 python har_analyzer.py path\to\capture.har --limit 25
+
+# Optional JSON summary output
+python har_analyzer.py path\to\capture.har --limit 25 --json-output .\har_summary.json
 ```
 
 ### NetLog Viewer (Chrome/Edge)
@@ -53,20 +56,20 @@ py -3 .\netlog_viewer.py path\to\netlog.json --limit 25
 py -3 .\netlog_viewer.py path\to\netlog.json --json-output .\netlog_summary.json
 ```
 
-### NetLog Side-by-Side Comparison (Chrome vs Edge)
+### NetLog vs HAR Comparison
 ```powershell
 .\compare_netlogs.ps1 `
-  -FirstNetLogPath .\chrome_netlog.json `
-  -SecondNetLogPath .\edge_netlog.json `
-  -FirstLabel "Chrome" `
-  -SecondLabel "Edge" `
-  -OutputPath .\netlog_compare.json
+  -NetLogPath .\chrome_netlog.json `
+  -HarPath .\app_capture.har `
+  -NetLogLabel "Chrome NetLog" `
+  -HarLabel "Checkout HAR" `
+  -OutputPath .\netlog_har_compare.json
 ```
 
 The comparison output shows:
-- Side-by-side reinstall scores and likelihood labels
-- Top error deltas between the two captures
-- Shared failing host overlap
+- Side-by-side browser-local signal vs HAR hang/failure rates
+- Delta view between top NetLog errors and HAR failure reasons
+- Shared host overlap between NetLog failing hosts and HAR top domains
 - One overall recommendation for triage
 
 The output shows:
@@ -130,11 +133,11 @@ The output now shows:
 - Host footprint of failing requests
 - Reinstall signal score to guide reset/reinstall triage
 
-### NetLog Comparison
-- Side-by-side comparison of two NetLog captures
-- Delta table for the most divergent net errors
-- Shared failing host analysis
-- Consolidated recommendation across both captures
+### NetLog vs HAR Comparison
+- Side-by-side comparison of one NetLog capture and one HAR capture
+- NetLog local reinstall signal shown next to HAR failure/stall rates
+- Shared host analysis (NetLog failing hosts vs HAR top domains)
+- Consolidated recommendation across both data sources
 
 ### Hardware Pipeline
 - Category summary (Search, GraphQL, Telemetry, Unknown)
@@ -149,7 +152,7 @@ The output now shows:
 | --- | --- | --- | --- | --- | --- |
 | HAR analysis | Diagnose app hangs and request-level failure patterns from browser/network captures with deduplication | `har_analyzer.py` | None | `.har` file | Console report with hang findings, category summary, deduplication stats, and timeline |
 | NetLog viewing | Triage Chrome/Edge network failures and estimate browser-local reinstall likelihood | `netlog_viewer.py` | None | NetLog `.json` export | Console report with net error summary, category breakdown, timeline, and reinstall signal |
-| NetLog comparison | Compare two NetLog captures (for example Chrome vs Edge) and output a single triage recommendation | `compare_netlogs.ps1` | `netlog_viewer.py` | Two NetLog `.json` exports | Console comparison + `netlog_compare.json` with score deltas and host overlap |
+| NetLog vs HAR comparison | Compare one NetLog capture with one HAR capture and output a single triage recommendation | `compare_netlogs.ps1` | `netlog_viewer.py`, `har_analyzer.py` | NetLog `.json` + HAR `.har` | Console comparison + `netlog_har_compare.json` with score deltas and host overlap |
 | Hardware pipeline | Flag possible Windows device instability from System Event IDs with timeout protection | `run_hardware_pipeline.ps1` | `collect.ps1`, `analyze.py` | Windows System log events (last N days) | `hardware_events.json`, `summary.txt`, `result.json` |
 
 ### Scripts
@@ -164,10 +167,10 @@ The output now shows:
   - Extracts and ranks Chromium net errors (ERR_*)
   - Scores reinstall likelihood based on local-vs-network error signatures
 
-- `compare_netlogs.ps1`: Runs side-by-side NetLog comparison for two captures
-  - Calls `netlog_viewer.py` for each capture and reads JSON summaries
-  - Highlights the largest error-count deltas
-  - Produces a consolidated recommendation and writes `netlog_compare.json`
+- `compare_netlogs.ps1`: Runs side-by-side NetLog-vs-HAR comparison
+  - Calls `netlog_viewer.py` and `har_analyzer.py` and reads JSON summaries
+  - Highlights the largest NetLog error vs HAR failure-signal deltas
+  - Produces a consolidated recommendation and writes `netlog_har_compare.json`
   
 - `collect.ps1`: Pulls selected Event IDs from the Windows System log for the last N days
   - Timeout-protected event queries

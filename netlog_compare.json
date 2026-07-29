@@ -1,0 +1,457 @@
+﻿{
+    "generated_at":  "2026-07-29T09:27:26.7079298-04:00",
+    "first_label":  "Chrome",
+    "second_label":  "Edge",
+    "first_file":  "C:\\Users\\lbickers2\\OneDrive - lululemon\\Documents\\GitHub CoPilot stuff\\chrome-net-export-cesar0729log.json",
+    "second_file":  "C:\\Users\\lbickers2\\OneDrive - lululemon\\Documents\\GitHub CoPilot stuff\\edge-net-export-log test 1.json",
+    "first":  [
+                  "===== NetLog Viewer =====",
+                  "",
+                  "File: ..\\chrome-net-export-cesar0729log.json",
+                  "Browser Hint: Google Chrome 150.0.7871.187",
+                  "Total NetLog Events: 8034",
+                  "Events With Failures: 35",
+                  "Unique Error Types: 5",
+                  "Affected Hosts: 5",
+                  "",
+                  "Top Net Errors:",
+                  "  24x  ERR_ADDRESS_UNREACHABLE",
+                  "  6x  ERR_IO_PENDING",
+                  "  2x  ERR_ABORTED",
+                  "  2x  ERR_WS_UPGRADE",
+                  "  1x  ERR_FAILED",
+                  "",
+                  "Top Error Event Types:",
+                  "  12x  UDP_CONNECT",
+                  "  12x  SOCKET_CONNECT",
+                  "  7x  REQUEST_ALIVE",
+                  "  1x  TCP_CONNECT_JOB_CONNECT",
+                  "  1x  SSL_CONNECT_JOB_CONNECT",
+                  "  1x  CANCELLED",
+                  "  1x  HTTP_CACHE_OPEN_OR_CREATE_ENTRY",
+                  "",
+                  "Event Categories:",
+                  "  HTTP: 3923",
+                  "  Other: 1621",
+                  "  Connection: 1106",
+                  "  TLS/Certificate: 450",
+                  "  DNS: 422",
+                  "  Proxy: 304",
+                  "  QUIC: 208",
+                  "",
+                  "Reinstall Signal:",
+                  "  Score: 15/100",
+                  "  Likelihood: Reinstall unlikely to help",
+                  "  Recommendation: Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                  "  Local Signature Hits: 0",
+                  "  Network Signature Hits: 24",
+                  "",
+                  "Error Timeline:",
+                  "  [4] time=6497043 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=bcvipph02.rightnowtech.com error=ERR_IO_PENDING",
+                  "  [5] time=6498219 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=api.prod.us.five9.net error=ERR_IO_PENDING",
+                  "  [6] time=6498305 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=app-scl.five9.com error=ERR_IO_PENDING",
+                  "  [7] time=6498457 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=web-sdk.aptrinsic.com error=ERR_IO_PENDING",
+                  "  [8] time=6498524 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=lululemon.goquiq.com error=ERR_IO_PENDING",
+                  "  [9] time=6498552 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=app-scl.five9.com error=ERR_IO_PENDING",
+                  "  [399] time=6498895 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [400] time=6498895 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [492] time=6498905 type=TCP_CONNECT_JOB_CONNECT phase=PHASE_END source=SSL_CONNECT_JOB host=- error=ERR_ABORTED",
+                  "  [493] time=6498905 type=SSL_CONNECT_JOB_CONNECT phase=PHASE_END source=SSL_CONNECT_JOB host=- error=ERR_ABORTED",
+                  "  [2548] time=6499397 type=CANCELLED phase=PHASE_NONE source=URL_REQUEST host=- error=ERR_WS_UPGRADE",
+                  "  [2549] time=6499397 type=REQUEST_ALIVE phase=PHASE_END source=URL_REQUEST host=- error=ERR_WS_UPGRADE",
+                  "  [2642] time=6499408 type=HTTP_CACHE_OPEN_OR_CREATE_ENTRY phase=PHASE_END source=URL_REQUEST host=- error=ERR_FAILED",
+                  "  [3722] time=6500903 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [3723] time=6500903 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [4912] time=6502335 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [4913] time=6502335 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [4984] time=6503429 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [4985] time=6503429 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [5567] time=6509041 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [5568] time=6509041 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [6098] time=6510290 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [6099] time=6510290 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [6426] time=6513844 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "  [6427] time=6513844 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                  "",
+                  "JSON summary written to: C:\\Users\\LBICKE~1\\AppData\\Local\\Temp\\netlog_first_535533bb1f104ba9ae5e8d502150844e.json",
+                  {
+                      "file":  "..\\chrome-net-export-cesar0729log.json",
+                      "browser_hint":  "Google Chrome 150.0.7871.187",
+                      "total_events":  8034,
+                      "event_categories":  {
+                                               "Connection":  1106,
+                                               "Other":  1621,
+                                               "HTTP":  3923,
+                                               "TLS/Certificate":  450,
+                                               "Proxy":  304,
+                                               "DNS":  422,
+                                               "QUIC":  208
+                                           },
+                      "error_counts":  {
+                                           "ERR_IO_PENDING":  6,
+                                           "ERR_ADDRESS_UNREACHABLE":  24,
+                                           "ERR_ABORTED":  2,
+                                           "ERR_WS_UPGRADE":  2,
+                                           "ERR_FAILED":  1
+                                       },
+                      "error_event_type_counts":  {
+                                                      "REQUEST_ALIVE":  7,
+                                                      "UDP_CONNECT":  12,
+                                                      "SOCKET_CONNECT":  12,
+                                                      "TCP_CONNECT_JOB_CONNECT":  1,
+                                                      "SSL_CONNECT_JOB_CONNECT":  1,
+                                                      "CANCELLED":  1,
+                                                      "HTTP_CACHE_OPEN_OR_CREATE_ENTRY":  1
+                                                  },
+                      "affected_hosts":  [
+                                             "api.prod.us.five9.net",
+                                             "app-scl.five9.com",
+                                             "bcvipph02.rightnowtech.com",
+                                             "lululemon.goquiq.com",
+                                             "web-sdk.aptrinsic.com"
+                                         ],
+                      "assessment":  {
+                                         "score":  15,
+                                         "likelihood":  "Reinstall unlikely to help",
+                                         "recommendation":  "Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                                         "total_failures":  35,
+                                         "local_signature_count":  0,
+                                         "network_signature_count":  24,
+                                         "affected_host_count":  5
+                                     },
+                      "timeline":  [
+                                       {
+                                           "index":  4,
+                                           "time":  "6497043",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "bcvipph02.rightnowtech.com",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  5,
+                                           "time":  "6498219",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "api.prod.us.five9.net",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  6,
+                                           "time":  "6498305",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "app-scl.five9.com",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  7,
+                                           "time":  "6498457",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "web-sdk.aptrinsic.com",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  8,
+                                           "time":  "6498524",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "lululemon.goquiq.com",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  9,
+                                           "time":  "6498552",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_BEGIN",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "app-scl.five9.com",
+                                           "error_name":  "ERR_IO_PENDING"
+                                       },
+                                       {
+                                           "index":  399,
+                                           "time":  "6498895",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  400,
+                                           "time":  "6498895",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  492,
+                                           "time":  "6498905",
+                                           "event_type":  "TCP_CONNECT_JOB_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "SSL_CONNECT_JOB",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ABORTED"
+                                       },
+                                       {
+                                           "index":  493,
+                                           "time":  "6498905",
+                                           "event_type":  "SSL_CONNECT_JOB_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "SSL_CONNECT_JOB",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ABORTED"
+                                       },
+                                       {
+                                           "index":  2548,
+                                           "time":  "6499397",
+                                           "event_type":  "CANCELLED",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "-",
+                                           "error_name":  "ERR_WS_UPGRADE"
+                                       },
+                                       {
+                                           "index":  2549,
+                                           "time":  "6499397",
+                                           "event_type":  "REQUEST_ALIVE",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "-",
+                                           "error_name":  "ERR_WS_UPGRADE"
+                                       },
+                                       {
+                                           "index":  2642,
+                                           "time":  "6499408",
+                                           "event_type":  "HTTP_CACHE_OPEN_OR_CREATE_ENTRY",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "URL_REQUEST",
+                                           "host":  "-",
+                                           "error_name":  "ERR_FAILED"
+                                       },
+                                       {
+                                           "index":  3722,
+                                           "time":  "6500903",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  3723,
+                                           "time":  "6500903",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  4912,
+                                           "time":  "6502335",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  4913,
+                                           "time":  "6502335",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  4984,
+                                           "time":  "6503429",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  4985,
+                                           "time":  "6503429",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  5567,
+                                           "time":  "6509041",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  5568,
+                                           "time":  "6509041",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  6098,
+                                           "time":  "6510290",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  6099,
+                                           "time":  "6510290",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  6426,
+                                           "time":  "6513844",
+                                           "event_type":  "UDP_CONNECT",
+                                           "phase":  "PHASE_END",
+                                           "source_type":  "UDP_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       },
+                                       {
+                                           "index":  6427,
+                                           "time":  "6513844",
+                                           "event_type":  "SOCKET_CONNECT",
+                                           "phase":  "PHASE_NONE",
+                                           "source_type":  "UDP_CLIENT_SOCKET",
+                                           "host":  "-",
+                                           "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                       }
+                                   ]
+                  }
+              ],
+    "second":  [
+                   "===== NetLog Viewer =====",
+                   "",
+                   "File: ..\\edge-net-export-log test 1.json",
+                   "Browser Hint: Microsoft Edge 150.0.4078.65",
+                   "Total NetLog Events: 147",
+                   "Events With Failures: 0",
+                   "Unique Error Types: 0",
+                   "Affected Hosts: 0",
+                   "",
+                   "Top Net Errors:",
+                   "  None",
+                   "",
+                   "Top Error Event Types:",
+                   "  None",
+                   "",
+                   "Event Categories:",
+                   "  Proxy: 59",
+                   "  QUIC: 32",
+                   "  Other: 29",
+                   "  Connection: 19",
+                   "  TLS/Certificate: 6",
+                   "  HTTP: 2",
+                   "",
+                   "Reinstall Signal:",
+                   "  Score: 0/100",
+                   "  Likelihood: Reinstall unlikely to help",
+                   "  Recommendation: Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                   "  Local Signature Hits: 0",
+                   "  Network Signature Hits: 0",
+                   "",
+                   "Error Timeline:",
+                   "  None",
+                   "",
+                   "JSON summary written to: C:\\Users\\LBICKE~1\\AppData\\Local\\Temp\\netlog_second_b91a6008373c42b9a0c69c0070f7f651.json",
+                   {
+                       "file":  "..\\edge-net-export-log test 1.json",
+                       "browser_hint":  "Microsoft Edge 150.0.4078.65",
+                       "total_events":  147,
+                       "event_categories":  {
+                                                "Connection":  19,
+                                                "Other":  29,
+                                                "Proxy":  59,
+                                                "QUIC":  32,
+                                                "HTTP":  2,
+                                                "TLS/Certificate":  6
+                                            },
+                       "error_counts":  {
+
+                                        },
+                       "error_event_type_counts":  {
+
+                                                   },
+                       "affected_hosts":  [
+
+                                          ],
+                       "assessment":  {
+                                          "score":  0,
+                                          "likelihood":  "Reinstall unlikely to help",
+                                          "recommendation":  "Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                                          "total_failures":  0,
+                                          "local_signature_count":  0,
+                                          "network_signature_count":  0,
+                                          "affected_host_count":  0
+                                      },
+                       "timeline":  [
+
+                                    ]
+                   }
+               ],
+    "shared_failing_hosts":  {
+
+                             },
+    "overall_recommendation":  "Neither capture strongly suggests browser reinstall. Focus on shared network, DNS, proxy, or upstream service factors.",
+    "error_delta":  [
+                        {
+                            "error":  "ERR_ADDRESS_UNREACHABLE",
+                            "first":  24,
+                            "second":  0,
+                            "delta":  24
+                        },
+                        {
+                            "error":  "ERR_IO_PENDING",
+                            "first":  6,
+                            "second":  0,
+                            "delta":  6
+                        },
+                        {
+                            "error":  "ERR_ABORTED",
+                            "first":  2,
+                            "second":  0,
+                            "delta":  2
+                        },
+                        {
+                            "error":  "ERR_WS_UPGRADE",
+                            "first":  2,
+                            "second":  0,
+                            "delta":  2
+                        },
+                        {
+                            "error":  "ERR_FAILED",
+                            "first":  1,
+                            "second":  0,
+                            "delta":  1
+                        }
+                    ]
+}
