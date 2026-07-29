@@ -975,6 +975,16 @@ def build_argument_parser() -> argparse.ArgumentParser:
 
 def write_json_summary(results: dict[str, Any], output_path: str, limit: int) -> None:
     network_calls: list[NetworkCall] = results["network_calls"]
+    failed_or_stalled_calls = [
+        call
+        for call in network_calls
+        if call.status == 0 or call.status >= 400 or call.wait_ms >= 4000 or call.blocked_ms >= 1000
+    ]
+    failed_or_stalled_calls = sorted(
+        failed_or_stalled_calls,
+        key=lambda call: (hang_severity(call), call.duration_ms),
+        reverse=True,
+    )
 
     payload = {
         "file_path": results["file_path"],
@@ -990,6 +1000,22 @@ def write_json_summary(results: dict[str, Any], output_path: str, limit: int) ->
         ],
         "category_counts": dict(results["category_counts"]),
         "failure_reason_counts": dict(results["failure_reason_counts"]),
+        "top_failed_or_stalled": [
+            {
+                "started_at": call.started_at,
+                "method": call.method,
+                "status": call.status,
+                "duration_ms": call.duration_ms,
+                "url": call.url,
+                "domain": call.domain,
+                "wait_ms": call.wait_ms,
+                "blocked_ms": call.blocked_ms,
+                "occurrence_count": call.occurrence_count,
+                "hang_reasons": call.hang_reasons,
+                "severity": hang_severity(call),
+            }
+            for call in failed_or_stalled_calls[:20]
+        ],
         "timeline": [
             {
                 "started_at": call.started_at,

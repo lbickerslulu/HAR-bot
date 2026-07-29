@@ -1,0 +1,1211 @@
+﻿{
+    "generated_at":  "2026-07-29T10:00:50.2397046-04:00",
+    "netlog_label":  "Chrome NetLog",
+    "har_label":  "Cesar HAR 1",
+    "netlog_file":  "C:\\Users\\lbickers2\\OneDrive - lululemon\\Documents\\GitHub CoPilot stuff\\chrome-net-export-cesar0729log.json",
+    "har_file":  "C:\\Users\\lbickers2\\OneDrive - lululemon\\Documents\\GitHub CoPilot stuff\\Cesar HAR 1.har",
+    "netlog":  [
+                   "===== NetLog Viewer =====",
+                   "",
+                   "File: ..\\chrome-net-export-cesar0729log.json",
+                   "Browser Hint: Google Chrome 150.0.7871.187",
+                   "Total NetLog Events: 8034",
+                   "Events With Failures: 35",
+                   "Unique Error Types: 5",
+                   "Affected Hosts: 5",
+                   "",
+                   "Top Net Errors:",
+                   "  24x  ERR_ADDRESS_UNREACHABLE",
+                   "  6x  ERR_IO_PENDING",
+                   "  2x  ERR_ABORTED",
+                   "  2x  ERR_WS_UPGRADE",
+                   "  1x  ERR_FAILED",
+                   "",
+                   "Top Error Event Types:",
+                   "  12x  UDP_CONNECT",
+                   "  12x  SOCKET_CONNECT",
+                   "  7x  REQUEST_ALIVE",
+                   "  1x  TCP_CONNECT_JOB_CONNECT",
+                   "  1x  SSL_CONNECT_JOB_CONNECT",
+                   "  1x  CANCELLED",
+                   "  1x  HTTP_CACHE_OPEN_OR_CREATE_ENTRY",
+                   "",
+                   "Event Categories:",
+                   "  HTTP: 3923",
+                   "  Other: 1621",
+                   "  Connection: 1106",
+                   "  TLS/Certificate: 450",
+                   "  DNS: 422",
+                   "  Proxy: 304",
+                   "  QUIC: 208",
+                   "",
+                   "Reinstall Signal:",
+                   "  Score: 15/100",
+                   "  Likelihood: Reinstall unlikely to help",
+                   "  Recommendation: Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                   "  Local Signature Hits: 0",
+                   "  Network Signature Hits: 24",
+                   "",
+                   "Error Timeline:",
+                   "  [4] time=6497043 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=bcvipph02.rightnowtech.com error=ERR_IO_PENDING",
+                   "  [5] time=6498219 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=api.prod.us.five9.net error=ERR_IO_PENDING",
+                   "  [6] time=6498305 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=app-scl.five9.com error=ERR_IO_PENDING",
+                   "  [7] time=6498457 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=web-sdk.aptrinsic.com error=ERR_IO_PENDING",
+                   "  [8] time=6498524 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=lululemon.goquiq.com error=ERR_IO_PENDING",
+                   "  [9] time=6498552 type=REQUEST_ALIVE phase=PHASE_BEGIN source=URL_REQUEST host=app-scl.five9.com error=ERR_IO_PENDING",
+                   "  [399] time=6498895 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [400] time=6498895 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [492] time=6498905 type=TCP_CONNECT_JOB_CONNECT phase=PHASE_END source=SSL_CONNECT_JOB host=- error=ERR_ABORTED",
+                   "  [493] time=6498905 type=SSL_CONNECT_JOB_CONNECT phase=PHASE_END source=SSL_CONNECT_JOB host=- error=ERR_ABORTED",
+                   "  [2548] time=6499397 type=CANCELLED phase=PHASE_NONE source=URL_REQUEST host=- error=ERR_WS_UPGRADE",
+                   "  [2549] time=6499397 type=REQUEST_ALIVE phase=PHASE_END source=URL_REQUEST host=- error=ERR_WS_UPGRADE",
+                   "  [2642] time=6499408 type=HTTP_CACHE_OPEN_OR_CREATE_ENTRY phase=PHASE_END source=URL_REQUEST host=- error=ERR_FAILED",
+                   "  [3722] time=6500903 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [3723] time=6500903 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [4912] time=6502335 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [4913] time=6502335 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [4984] time=6503429 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [4985] time=6503429 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [5567] time=6509041 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [5568] time=6509041 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [6098] time=6510290 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [6099] time=6510290 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [6426] time=6513844 type=UDP_CONNECT phase=PHASE_END source=UDP_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "  [6427] time=6513844 type=SOCKET_CONNECT phase=PHASE_NONE source=UDP_CLIENT_SOCKET host=- error=ERR_ADDRESS_UNREACHABLE",
+                   "",
+                   "JSON summary written to: C:\\Users\\LBICKE~1\\AppData\\Local\\Temp\\netlog_summary_ae7bcb32cd7d42be89f06d6b85197e45.json",
+                   {
+                       "file":  "..\\chrome-net-export-cesar0729log.json",
+                       "browser_hint":  "Google Chrome 150.0.7871.187",
+                       "total_events":  8034,
+                       "event_categories":  {
+                                                "Connection":  1106,
+                                                "Other":  1621,
+                                                "HTTP":  3923,
+                                                "TLS/Certificate":  450,
+                                                "Proxy":  304,
+                                                "DNS":  422,
+                                                "QUIC":  208
+                                            },
+                       "error_counts":  {
+                                            "ERR_IO_PENDING":  6,
+                                            "ERR_ADDRESS_UNREACHABLE":  24,
+                                            "ERR_ABORTED":  2,
+                                            "ERR_WS_UPGRADE":  2,
+                                            "ERR_FAILED":  1
+                                        },
+                       "error_event_type_counts":  {
+                                                       "REQUEST_ALIVE":  7,
+                                                       "UDP_CONNECT":  12,
+                                                       "SOCKET_CONNECT":  12,
+                                                       "TCP_CONNECT_JOB_CONNECT":  1,
+                                                       "SSL_CONNECT_JOB_CONNECT":  1,
+                                                       "CANCELLED":  1,
+                                                       "HTTP_CACHE_OPEN_OR_CREATE_ENTRY":  1
+                                                   },
+                       "affected_hosts":  [
+                                              "api.prod.us.five9.net",
+                                              "app-scl.five9.com",
+                                              "bcvipph02.rightnowtech.com",
+                                              "lululemon.goquiq.com",
+                                              "web-sdk.aptrinsic.com"
+                                          ],
+                       "assessment":  {
+                                          "score":  15,
+                                          "likelihood":  "Reinstall unlikely to help",
+                                          "recommendation":  "Prioritize endpoint, DNS, proxy, or network path troubleshooting.",
+                                          "total_failures":  35,
+                                          "local_signature_count":  0,
+                                          "network_signature_count":  24,
+                                          "affected_host_count":  5
+                                      },
+                       "timeline":  [
+                                        {
+                                            "index":  4,
+                                            "time":  "6497043",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "bcvipph02.rightnowtech.com",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  5,
+                                            "time":  "6498219",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "api.prod.us.five9.net",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  6,
+                                            "time":  "6498305",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "app-scl.five9.com",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  7,
+                                            "time":  "6498457",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "web-sdk.aptrinsic.com",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  8,
+                                            "time":  "6498524",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "lululemon.goquiq.com",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  9,
+                                            "time":  "6498552",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_BEGIN",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "app-scl.five9.com",
+                                            "error_name":  "ERR_IO_PENDING"
+                                        },
+                                        {
+                                            "index":  399,
+                                            "time":  "6498895",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  400,
+                                            "time":  "6498895",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  492,
+                                            "time":  "6498905",
+                                            "event_type":  "TCP_CONNECT_JOB_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "SSL_CONNECT_JOB",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ABORTED"
+                                        },
+                                        {
+                                            "index":  493,
+                                            "time":  "6498905",
+                                            "event_type":  "SSL_CONNECT_JOB_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "SSL_CONNECT_JOB",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ABORTED"
+                                        },
+                                        {
+                                            "index":  2548,
+                                            "time":  "6499397",
+                                            "event_type":  "CANCELLED",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "-",
+                                            "error_name":  "ERR_WS_UPGRADE"
+                                        },
+                                        {
+                                            "index":  2549,
+                                            "time":  "6499397",
+                                            "event_type":  "REQUEST_ALIVE",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "-",
+                                            "error_name":  "ERR_WS_UPGRADE"
+                                        },
+                                        {
+                                            "index":  2642,
+                                            "time":  "6499408",
+                                            "event_type":  "HTTP_CACHE_OPEN_OR_CREATE_ENTRY",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "URL_REQUEST",
+                                            "host":  "-",
+                                            "error_name":  "ERR_FAILED"
+                                        },
+                                        {
+                                            "index":  3722,
+                                            "time":  "6500903",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  3723,
+                                            "time":  "6500903",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  4912,
+                                            "time":  "6502335",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  4913,
+                                            "time":  "6502335",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  4984,
+                                            "time":  "6503429",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  4985,
+                                            "time":  "6503429",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  5567,
+                                            "time":  "6509041",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  5568,
+                                            "time":  "6509041",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  6098,
+                                            "time":  "6510290",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  6099,
+                                            "time":  "6510290",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  6426,
+                                            "time":  "6513844",
+                                            "event_type":  "UDP_CONNECT",
+                                            "phase":  "PHASE_END",
+                                            "source_type":  "UDP_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        },
+                                        {
+                                            "index":  6427,
+                                            "time":  "6513844",
+                                            "event_type":  "SOCKET_CONNECT",
+                                            "phase":  "PHASE_NONE",
+                                            "source_type":  "UDP_CLIENT_SOCKET",
+                                            "host":  "-",
+                                            "error_name":  "ERR_ADDRESS_UNREACHABLE"
+                                        }
+                                    ]
+                   }
+               ],
+    "har":  [
+                "",
+                "===== HAR HANG DIAGNOSTIC =====",
+                "",
+                "HAR File: ..\\Cesar HAR 1.har",
+                "Total Requests in HAR: 607",
+                "Unique Endpoints (after dedup): 39",
+                "Duplicate Requests Detected: 92",
+                "Redundancy Eliminated: 15.2% reduction",
+                "Classified Calls: 39",
+                "Failed Calls (status 0 or \u003e=400): 1",
+                "Slow Calls (\u003e=3000ms): 1",
+                "Stalled Calls (wait\u003e=4000ms or blocked\u003e=1000ms): 1",
+                "",
+                "Core Hang Findings:",
+                "  - Hanging Profile: failed=1/607 (0.2%), slow=1/607 (0.2%), stalled=1/607 (0.2%).",
+                "  - Primary Hang Signal: high queue/blocked time (10 request(s)).",
+                "  - Top Hang Suspect: GET 400 5547ms https://lululemon.custhelp.com/services/rest/connect/latest/tasks?q=CustomFields.c.five9_agent%20=%20%27null%27%20and%20completedTime%20between%20%272026-06-09T23:00:00.000Z%27%20and%20%272026-06-10T23:00:00.000Z%27%20and%20CustomFields.c.five9_sessionId%20is%20not%20null (severity=16.5; reasons: client or auth error response, slow total duration, long server wait (TTFB)).",
+                "",
+                "Top Hanging Requests:",
+                "  severity=16.5 | GET 400 5547ms | /services/rest/connect/latest/tasks",
+                "     reasons: client or auth error response, slow total duration, long server wait (TTFB)",
+                "",
+                "Top Domains:",
+                "  lululemon.custhelp.com: 186",
+                "  app-scl.five9.com: 110",
+                "  lululemon.goquiq.com: 66",
+                "  api.prod.us.five9.net: 41",
+                "  app.five9.com: 24",
+                "",
+                "Category Summary:",
+                "  Unknown: 363",
+                "  Static Assets: 116",
+                "  Search: 19",
+                "  Telemetry / Analytics: 10",
+                "  Ads / Marketing: 6",
+                "  Autocomplete / Recommendations: 1",
+                "",
+                "Standard Failure Signals:",
+                "  10x  high queue/blocked time",
+                "  4x  long server wait (TTFB)",
+                "  4x  client or auth error response",
+                "  3x  very slow total duration",
+                "  1x  slow total duration",
+                "",
+                "Top Search Endpoints:",
+                "  16x  GET /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch",
+                "  2x  GET /services/rest/connect/latest/queryResults",
+                "  1x  GET /AgentWeb/api/contextmanager/v.32603230003/navigationContext/quickSearchNavigationSet",
+                "",
+                "Top Autocomplete / Recommendations Endpoints:",
+                "  1x  GET /AgentWeb/api/contextmanager/v.32603230003/userSettingsContext/chatSuggestionPanelUndocked",
+                "",
+                "Top Telemetry / Analytics Endpoints:",
+                "  5x  POST /flow/v1/metrics/domains/122698/counter",
+                "  1x  POST /cdn-cgi/rum",
+                "  1x  POST /api/v1/token/generate",
+                "  1x  POST /external/contact-events/events/transcript-v2",
+                "  1x  POST /events/bulk/5e838af0ce1be90750c486ca",
+                "",
+                "Top Ads / Marketing Endpoints:",
+                "  1x  GET /appsvcs/rs/svc/orgs/122698/campaigns",
+                "  1x  OPTIONS /appsvcs/rs/svc/orgs/122698/campaigns",
+                "  1x  GET /messaging-config/v1/domains/122698/campaigns",
+                "  1x  OPTIONS /messaging-config/v1/domains/122698/campaigns",
+                "  1x  GET /appsvcs/rs/svc/agents/4777939/campaigns_config",
+                "",
+                "Top Static Assets Endpoints:",
+                "  1x  GET /style.css",
+                "  1x  GET /AgentWeb/api/agentbrowserui/v.32603230003/node_modules/requirejs/require.js",
+                "  1x  GET /AgentWeb/api/agentbrowserui/v.32603230003/node_modules/jquery/dist/jquery.min.js",
+                "  1x  GET /AgentWeb/api/agentbrowserui/v.32603230003/framework/core/js/config.js",
+                "  1x  GET /AgentWeb/api/agentbrowserui/v.32603230003/libs/common.js",
+                "",
+                "Top Unknown Endpoints:",
+                "  14x  GET /api/1/r",
+                "  5x  GET /AgentWeb/api/contextmanager/v.32603230003/siteInfoService/clientTranslations",
+                "  5x  GET /rte/v1/command",
+                "  4x  POST /AgentWeb/api/contextmanager/v.32603230003/workspaceContext/entities/workspaceEntities",
+                "  4x  GET /appsvcs/rs/svc/auth/metadata",
+                "",
+                "Linear Request Timeline:",
+                "",
+                "  [1] GET 200 305ms  https://lululemon.custhelp.com/services/rest/connect/latest/queryResults?query=SELECT%20*,DataCenter.lookupName%20as%20DataCenter,%20NoMatchRule.lookupName%20as%20NoMatchRule,MultiMatchRule.lookupName%20as%20MultiMatchRule,DefaultSearchRule.lookupName%20as%20DefaultSearchRule%20FROM%20F9.Configuration%20WHERE%20Profile.id%20=%20281 (╫2)",
+                "      Classification: Search | HIGH confidence | score=8",
+                "      Request Terms: SELECT *,DataCenter.lookupName as DataCenter, NoMatchRule.lookupName as NoMatchRule,MultiMatchRule.lookupName as MultiMatchRule,DefaultSearchRule.lookupName as DefaultSearchRule FROM F9.Configuration WHERE Profile.id = 281",
+                "      Request Snippet: /services/rest/connect/latest/queryResults | query=SELECT *,DataCenter.lookupName as DataCenter, NoMatchRule.lookupName as NoMatchRule,MultiMatchRule.lookupName as MultiMatchRule,DefaultSearchRule.lookupName as DefaultSearchRule FROM F9.Configuration WHERE Profile.id = 281",
+                "      Result Count: 1",
+                "      Timings(ms) - avg: blocked=5, dns=0, connect=0, ssl=0, send=0, wait=296, receive=1",
+                "      Response Size: 751 bytes",
+                "      Response Snippet: {\"items\":[{\"tableName\":\"Table0\",\"count\":1,\"columnNames\":[\"CreatedByAccount\",\"createdTime\",\"DataCenter\",\"DefaultCreateRecord\",\"DefaultCreateRecordTable\",\"DefaultSearchRule\",\"id\",\"IdpInitiatedLoginURL\",\"MultiMatchRule\",\"MyCallsTodayReportAcId\",\"Name\",\"lookupName",
+                "      DUPLICATE: This request appeared 2 times in the capture",
+                "",
+                "  [2] GET 200 612ms  https://lululemon.custhelp.com/AgentWeb/api/contextmanager/v.32603230003/navigationContext/quickSearchNavigationSet",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/contextmanager/v.32603230003/navigationContext/quickSearchNavigationSet",
+                "      Timings(ms): blocked=11, dns=0, connect=0, ssl=0, send=1, wait=599, receive=1",
+                "      Response Size: 1725 bytes",
+                "      Product Names: Quick Search, Incident Search, Name, Row Limit",
+                "      Response Snippet: [{\"title\":\"Quick Search\",\"iconClass\":\"\",\"commandType\":\"\",\"recordType\":null,\"recordId\":131827,\"enabled\":true,\"children\":[{\"title\":\"Incident Search\",\"iconClass\":\"\",\"commandType\":\"Report\",\"recordType\":null,\"recordId\":510983,\"enabled\":true,\"children\":[],\"analytics",
+                "",
+                "  [3] GET 304 191ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2222%22%2C%22dV%22%3Anull%2C%22lt%22%3A500%2C%22fr%22%3Anull%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2217%22%2C%22dV%22%3Anull%2C%22lt%22%3A500%2C%22fr%22%3Anull%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"22\",\"dV\":null,\"lt\":500,\"fr\":null,\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false},{\"sT\":\"Menu\",\"sI\":\"17\",\"dV\":null,\"lt\":500,\"fr\":null,\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 6",
+                "      Timings(ms): blocked=5, dns=0, connect=0, ssl=0, send=1, wait=184, receive=1",
+                "      Product Names: Menu",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":6,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":1,\"typeId\":0,\"type\":\"Menu\",\"label\":\"English (US)\",\"level\":1,\"parent\":false,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIdsCalculated\":false,\"childr",
+                "",
+                "  [4] GET 200 247ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%221272%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221271%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"10\",\"dV\":{\"mId\":\"1272\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false},{\"sT\":\"Menu\",\"sI\":\"13\",\"dV\":{\"mId\":\"1271\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":true,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 26",
+                "      Timings(ms): blocked=6, dns=0, connect=0, ssl=0, send=1, wait=239, receive=1",
+                "      Response Size: 818 bytes",
+                "      Product Names: Menu, menuItemId, defaultValueSearch, GroupsSelectable",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":26,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":53,\"typeId\":0,\"type\":\"Menu\",\"label\":\"lululemon\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIds\":[1272,1832,1273,1274,1275",
+                "",
+                "  [5] GET 200 6ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221254%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"13\",\"dV\":{\"mId\":\"1254\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":true,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, menuItemId, defaultValueSearch, GroupsSelectable",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":true,\"moreChildren\":true,\"items\":[{\"id\":893,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Placing an order\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":14,\"moreChildren\":true,\"visibleChildIds\":[1246,941,1254,1356,",
+                "",
+                "  [6] GET 200 232ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%221276%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221112%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"10\",\"dV\":{\"mId\":\"1276\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false},{\"sT\":\"Menu\",\"sI\":\"13\",\"dV\":{\"mId\":\"1112\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":true,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 26",
+                "      Timings(ms): blocked=6, dns=0, connect=0, ssl=0, send=1, wait=224, receive=1",
+                "      Response Size: 824 bytes",
+                "      Product Names: Menu, menuItemId, defaultValueSearch, GroupsSelectable",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":26,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":53,\"typeId\":0,\"type\":\"Menu\",\"label\":\"lululemon\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIds\":[1272,1832,1273,1274,1275",
+                "",
+                "  [7] GET 200 219ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%2253%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"10\",\"dV\":{\"mId\":\"53\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 26",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=212, receive=2",
+                "      Response Size: 686 bytes",
+                "      Product Names: Menu, menuItemId, defaultValueSearch, GroupsSelectable",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":26,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":53,\"typeId\":0,\"type\":\"Menu\",\"label\":\"lululemon\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIds\":[1272,1832,1273,1274,1275",
+                "",
+                "  [8] GET 200 224ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2219%22%2C%22dV%22%3A%7B%22mId%22%3A%222%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2243%22%2C%22dV%22%3A%7B%22mId%22%3A%2237%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"19\",\"dV\":{\"mId\":\"2\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false},{\"sT\":\"Menu\",\"sI\":\"43\",\"dV\":{\"mId\":\"37\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"GroupsSelectable\",\"vl\":0,\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 5",
+                "      Timings(ms): blocked=7, dns=0, connect=0, ssl=0, send=1, wait=215, receive=1",
+                "      Response Size: 1406 bytes",
+                "      Product Names: Menu, GroupsSelectable, menuItemId, defaultValueSearch",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":5,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":2,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Solved\",\"level\":0,\"parent\":false,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIdsCalculated\":false,\"children\":[]",
+                "",
+                "  [9] GET 200 388ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%222%22%2C%22dV%22%3A%7B%22mId%22%3A%2215707290%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22ControlContext%22%2C%22vl%22%3A%22Incident%22%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"2\",\"dV\":{\"mId\":\"15707290\",\"nDI\":true},\"lt\":500,\"fr\":{\"fO\":\"and\",\"ch\":[{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"ControlContext\",\"vl\":\"Incident\",\"cn\":\"isEqual\"}}],\"fT\":null},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=6, dns=0, connect=0, ssl=0, send=1, wait=380, receive=1",
+                "      Response Size: 493 bytes",
+                "      Product Names: Menu, menuItemId, defaultValueSearch, ControlContext",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":true,\"moreChildren\":true,\"items\":[{\"id\":153517,\"typeId\":0,\"type\":\"Menu\",\"label\":\"GEC EMEA\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":8,\"moreChildren\":true,\"visibleChildIdsCalculated\":false,\"children\"",
+                "",
+                "  [10] GET 200 183ms  https://lululemon.custhelp.com/AgentWeb/api/contextmanager/v.32603230003/userSettingsContext/chatSuggestionPanelUndocked",
+                "      Classification: Autocomplete / Recommendations | MEDIUM confidence | score=5",
+                "      Request Snippet: /AgentWeb/api/contextmanager/v.32603230003/userSettingsContext/chatSuggestionPanelUndocked",
+                "      Timings(ms): blocked=5, dns=0, connect=0, ssl=0, send=0, wait=177, receive=1",
+                "      Response Size: 5 bytes",
+                "      Response Snippet: false",
+                "",
+                "  [11] POST 204 40ms  https://lululemon.quiq-api.com/cdn-cgi/rum?",
+                "      Classification: Telemetry / Analytics | LOW confidence | score=1",
+                "      Request Snippet: /cdn-cgi/rum | {\"memory\":{\"totalJSHeapSize\":6252880,\"usedJSHeapSize\":4954072,\"jsHeapSizeLimit\":4395630592},\"resources\":[],\"referrer\":\"https://lululemon.custhelp.com/\",\"eventType\":1,\"firstPaint\":0,\"firstContentfulPaint\":0,\"startTime\":1781092971534.8,\"versions\":{\"fl\"",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=1, wait=34, receive=1",
+                "",
+                "  [12] POST 200 964ms  https://lululemon.goquiq.com/api/v1/token/generate?trackingId=tid.1781018796690.a494f177e69bb49627\u0026quiqVersion=2.16.142\u0026oid=-6gwue0",
+                "      Classification: Telemetry / Analytics | LOW confidence | score=1",
+                "      Request Snippet: /api/v1/token/generate | trackingId=tid.1781018796690.a494f177e69bb49627, quiqVersion=2.16.142, oid=-6gwue0",
+                "      Timings(ms): blocked=3, dns=0, connect=802, ssl=640, send=1, wait=157, receive=1",
+                "      Response Snippet: {\"accessToken\":\"eyJhbGciOiJIUzI1NiIsImtpZCI6ImVuZHVzZXI6MCJ9.eyJ0ZW5hbnQiOiJsdWx1bGVtb24iLCJleHAiOjE3OTY4MTc3NjQsImlzc3VlZCI6MTc4MTAxODc5NjY5MCwicmVuZXdhYmxlIjp0cnVlLCJ1cGRhdGVkIjoxNzgxMDkyOTY0MjYzLCJzdWIiOiJ0aWQuMTc4MTAxODc5NjY5MC5hNDk0ZjE3N2U2OWJiNDk2MjcifQ.",
+                "",
+                "  [13] GET 200 211ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2243%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A37%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"43\",\"dV\":null,\"lt\":200,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"Id\",\"vl\":37,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=6, dns=0, connect=0, ssl=0, send=1, wait=202, receive=1",
+                "      Response Size: 373 bytes",
+                "      Product Names: Menu, Id",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":true,\"items\":[{\"id\":37,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Europe General - English\",\"level\":1,\"parent\":false,\"enabled\":true,\"sequence\":0,\"moreChildren\":false,\"visibleChildIdsCalculated\":f",
+                "",
+                "  [14] GET 200 330ms  https://lululemon.goquiq.com/external/configs/settings?config=EGRESS_ALLOWED_DOMAINS_SETTINGS\u0026config=ACCOUNT_EMAIL_DOMAIN_SETTINGS\u0026config=DYNAMICS_CONTACT_CUSTOM_RELATIONSHIP_FIELD_CONFIGURATION\u0026config=ESCAPE_CSV_FIELDS_CONFIG\u0026config=TIME_AVAILABLE_COLUMN_MODE\u0026config=TIME_AVAILABLE_COLUMN_QUERY_PERCENTAGE\u0026config=REACTIVATED_CONVOS_GO_TO_BACK_OF_QUEUE\u0026config=INITIAL_AGENT_STATUS\u0026config=DEFAULT_AGENT_STATUS\u0026config=WORK_ITEM_INVITATIONS_DISABLED\u0026config=DEFAULT_ALLOWED_USER_CONTENT_TYPES\u0026config=DEFAULT_REDIRECT_TO\u0026config=TWILIO_ADMIN_UI_ADMIN_ENABLED\u0026config=SENTIMENT_ANALYSIS_MODE\u0026config=CONVERSATIONAL_COMMERCE_ENABLED\u0026config=AUTO_RESPONSE_MODE\u0026config=AGENT_STOP_LIST_ENABLED\u0026config=CHAT_ABANDONMENT_TIMER\u0026config=SOFT_ASSIGNMENT_LIMIT\u0026config=HARD_ASSIGNMENT_LIMIT\u0026config=CARD_DEMOTION_CONFIGURATION\u0026config=IP_WHITELIST\u0026config=DEFAULT_LANGUAGES\u0026config=AUTO_MESSAGE_TRANSLATION_ENABLED\u0026config=TRENDS_USE_DOWN_SAMPLES\u0026config=TRENDS_RAW_SAMPLE_RANGE_SECONDS\u0026config=REMOTE_QUEUEING_CONFIGURATION\u0026config=REMOTE_QUEUEING_MANAGED_USER\u0026config=OMNI_HARD_LIMIT_ADDITIONAL_PERCENT\u0026config=COMMON_WRITTEN_LANGUAGES\u0026config=MAX_GLOBAL_BRAND_COUNT\u0026config=MAX_GLOBAL_USE_CASE_COUNT\u0026config=INLINE_FIELD_SUGGESTIONS_ENABLED\u0026config=MERGE_MESSAGE_DEFINITIONS\u0026config=CONVERSATION_SUMMARIES_ENABLED\u0026config=CONSIDERED_PII_FIELD_LIST\u0026config=MANAGER_ALLOW_CONVO_SEARCH_PII_FIELDS\u0026config=MANAGER_ALLOW_CONVO_EXPORT_PII_FIELDS\u0026config=DATA_FRAME_RUNTIME\u0026config=EXPERIMENTAL_DATA_FRAMES_ENABLED\u0026config=DATASET_CARDINALITY_CONFIG\u0026config=CONVERSATION_SUMMARY_CONFIGURATION\u0026config=QUIQ_STT_ENABLE_KEYWORD_BOOSTS\u0026config=NOTIFICATION_REPLIES_RECEIVED_WEBHOOK_VISIBLE\u0026config=INBOUND_MESSAGES_RECEIVED_WEBHOOK_VISIBLE\u0026config=PARSE_FOR_HALLPASS_CONTEXT\u0026config=WHATSAPP_PARSE_FOR_HALLPASS_CONTEXT\u0026config=BOT_LLM_RETRY_OPTIONS\u0026config=PREVENT_MIXED_ROLES\u0026config=PREVENT_MIXED_QUEUES\u0026config=QUEUE_WITH_AGENT_SEGMENT_STATS_SETTINGS\u0026config=RING_MASTER_TENANT_MUST_AUTH_INBOUND_CALLS\u0026config=REPORTS_UI_AGENT_SEGMENT_SELECTOR_OPTIONS\u0026config=ROLE_BASED_TWO_FACTOR_ENFORCEMENT\u0026config=EXPOSE_NOTIFICATION_LOGIC_IN_SURVEY_CONTEXT\u0026config=CHAT_VARIABLE_REPLACEMENT_ENABLED\u0026config=CM_MESSAGING_KEYS_META_VISIBLE\u0026config=CONTACT_POINT_ADDITIONAL_APPLE_BIZ_IDS\u0026config=CONVERSATION_SCOPE_CONFIG\u0026config=AI_SERVICE_ENABLE_INTERNAL_EXECUTION\u0026config=MAXIMUM_THINKING_SOUND_COUNT\u0026config=MAXIMUM_THINKING_SOUND_SIZE\u0026config=THINKING_SOUND_CONTENT_TYPES\u0026config=MAXIMUM_AUDIO_COUNT\u0026config=MAXIMUM_AUDIO_SIZE\u0026config=AUDIO_CONTENT_TYPES\u0026config=AI_ASSISTANT_ALT_SUGGESTIONS_ENABLED\u0026config=OTP_SETUP_EXPOSE_ADDITIONAL_DETAILS\u0026config=VOICE_EMIT_CONTROL_MESSAGES\u0026config=RCS_PARSE_FOR_HALLPASS_CONTEXT\u0026config=MFA_SETUP_REQUIRE_EMAILED_CODE\u0026config=EA_BREAKDOWNS_INCLUDE_COLUMN_TOTALS\u0026config=DEEP_QUEUE_ACTIONS_ENABLED\u0026config=HACKATHON_CLOSED_CAPTION\u0026config=AGENT_EXTERNAL_ID_VISIBLE_FOR_WEBHOOKS\u0026config=CONTACT_EVENT_AI_AGENT_TRIGGERS_ENABLED\u0026registrants=message-ui (╫2)",
+                "      Classification: Unknown | LOW confidence | score=4",
+                "      Request Snippet: /external/configs/settings | config=EGRESS_ALLOWED_DOMAINS_SETTINGS;ACCOUNT_EMAIL_DOMAIN_SETTINGS, registrants=message-ui",
+                "      Timings(ms) - avg: blocked=3, dns=0, connect=0, ssl=0, send=1, wait=186, receive=140",
+                "      Response Snippet: {\"BOT_SESSION_FIELDS_IN_ANALYTICS_LIMIT\":{\"value\":25},\"DISMISS_OSC_INSIGHTS_MIGRATION_NOTICE\":{\"value\":false},\"EMOJIS_ENABLED\":{\"value\":true},\"BOT_BILLING_WARNING_FREE_UNTIL_RENEWAL\":{\"value\":\"Bots are a new way in which Quiq enables you to engage with your cl",
+                "      DUPLICATE: This request appeared 2 times in the capture",
+                "",
+                "  [15] GET 200 134ms  https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=sessionInitialized\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%7D\u0026cb=1781092982750-3815",
+                "      Classification: Unknown | LOW confidence | score=3",
+                "      Request Terms: ?f9crmapi=true\u0026f9verticalthreshold=500px\u0026idpLoginUrl=https://myapps.microsoft.com/signin/Five9%20for%20Oracle%20Service%20Cloud/251d4d46579f4905abe399298fd09143",
+                "      Request Snippet: /rte/v1/command | p=AP-90IIBSPWGVRN-2, sv=0.59.9, v=AP-90IIBSPWGVRN-2-1781018159072-63919234, ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab, vt=2",
+                "      Timings(ms): blocked=7, dns=0, connect=0, ssl=0, send=1, wait=126, receive=1",
+                "      Response Snippet: {\"ai\":\"5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\",\"p\":\"AP-90IIBSPWGVRN-2\"}",
+                "",
+                "  [16] GET 200 127ms  https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=pageview\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%7D\u0026cb=1781092982762-6612",
+                "      Classification: Unknown | LOW confidence | score=3",
+                "      Request Terms: ?f9crmapi=true\u0026f9verticalthreshold=500px\u0026idpLoginUrl=https://myapps.microsoft.com/signin/Five9%20for%20Oracle%20Service%20Cloud/251d4d46579f4905abe399298fd09143",
+                "      Request Snippet: /rte/v1/command | p=AP-90IIBSPWGVRN-2, sv=0.59.9, v=AP-90IIBSPWGVRN-2-1781018159072-63919234, ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab, vt=2",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=122, receive=1",
+                "      Response Snippet: {\"ai\":\"5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\",\"p\":\"AP-90IIBSPWGVRN-2\"}",
+                "",
+                "  [17] GET 200 6ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1272%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"10\",\"dV\":null,\"lt\":200,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"Id\",\"vl\":1272,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, Id",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":53,\"typeId\":0,\"type\":\"Menu\",\"label\":\"lululemon\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":0,\"moreChildren\":true,\"visibleChildIds\":[1272,1832,1273,1274,1275,1",
+                "",
+                "  [18] GET 200 133ms  https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=identify\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%22usf%22%3A%7B%22ide%22%3A%22E6FRXQ272ECFYSSWZ6LRMB7COMKAJYMY%22%2C%22customAttributes%22%3A%7B%7D%2C%22accountId%22%3A%22122698%22%7D%2C%22acf%22%3A%7B%22id%22%3A%22122698%22%2C%22customAttributes%22%3A%7B%22domainId%22%3A%22122698%22%2C%22jurisdictionId%22%3A%22us%22%7D%7D%7D\u0026cb=1781092983013-5843",
+                "      Classification: Unknown | LOW confidence | score=3",
+                "      Request Terms: ?f9crmapi=true\u0026f9verticalthreshold=500px\u0026idpLoginUrl=https://myapps.microsoft.com/signin/Five9%20for%20Oracle%20Service%20Cloud/251d4d46579f4905abe399298fd09143",
+                "      Request Snippet: /rte/v1/command | p=AP-90IIBSPWGVRN-2, sv=0.59.9, v=AP-90IIBSPWGVRN-2-1781018159072-63919234, ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab, vt=2",
+                "      Timings(ms): blocked=3, dns=0, connect=0, ssl=0, send=1, wait=128, receive=1",
+                "      Response Snippet: {\"ai\":\"5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\",\"p\":\"AP-90IIBSPWGVRN-2\"}",
+                "",
+                "  [19] GET 200 131ms  https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=custom\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026cet=Login\u0026ep=%7B%22epr%22%3A%7B%22application%22%3A%22ADT%22%2C%22appKey%22%3A%22ADT%22%2C%22uiMode%22%3A%22Responsive%22%2C%22deploymentType%22%3A%22freedom%22%2C%22crmWorkspace%22%3A%22NA%22%2C%22uiVersion%22%3A%222025.11.18%22%2C%22extensionVersion%22%3A%22na%22%7D%7D\u0026cb=1781092983195-8644",
+                "      Classification: Unknown | LOW confidence | score=3",
+                "      Request Terms: ?f9crmapi=true\u0026f9verticalthreshold=500px\u0026idpLoginUrl=https://myapps.microsoft.com/signin/Five9%20for%20Oracle%20Service%20Cloud/251d4d46579f4905abe399298fd09143",
+                "      Request Snippet: /rte/v1/command | p=AP-90IIBSPWGVRN-2, sv=0.59.9, v=AP-90IIBSPWGVRN-2-1781018159072-63919234, ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab, vt=2",
+                "      Timings(ms): blocked=3, dns=0, connect=0, ssl=0, send=0, wait=127, receive=1",
+                "      Response Snippet: {\"ai\":\"5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\",\"p\":\"AP-90IIBSPWGVRN-2\"}",
+                "",
+                "  [20] GET 204 125ms  https://esp.aptrinsic.com/rte/v1/inapp?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026u=app.five9.com%2Fclients%2Fintegrations%2Fadt.li.main.html%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026gcx=%7B%7D\u0026cb=1781092984298-9767",
+                "      Classification: Unknown | LOW confidence | score=3",
+                "      Request Terms: ?f9crmapi=true\u0026f9verticalthreshold=500px\u0026idpLoginUrl=https://myapps.microsoft.com/signin/Five9%20for%20Oracle%20Service%20Cloud/251d4d46579f4905abe399298fd09143",
+                "      Request Snippet: /rte/v1/inapp | p=AP-90IIBSPWGVRN-2, sv=0.59.9, v=AP-90IIBSPWGVRN-2-1781018159072-63919234, ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab, vt=2",
+                "      Timings(ms): blocked=3, dns=0, connect=0, ssl=0, send=1, wait=121, receive=1",
+                "",
+                "  [21] GET 200 6ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1276%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"10\",\"dV\":null,\"lt\":200,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"Id\",\"vl\":1276,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, Id",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":false,\"items\":[{\"id\":53,\"typeId\":0,\"type\":\"Menu\",\"label\":\"lululemon\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":0,\"moreChildren\":true,\"visibleChildIds\":[1272,1832,1273,1274,1275,1",
+                "",
+                "  [22] GET 200 320ms  https://lululemon.custhelp.com/services/rest/connect/latest/queryResults?query=SELECT%20*,TableType.lookupName%20as%20TableType,CallSearchType.lookupName%20as%20CallSearchType,TextSearchType.lookupName%20as%20TextSearchType%20FROM%20F9.Entity%20WHERE%20Configuration_ID%20=%2083",
+                "      Classification: Search | HIGH confidence | score=8",
+                "      Request Terms: SELECT *,TableType.lookupName as TableType,CallSearchType.lookupName as CallSearchType,TextSearchType.lookupName as TextSearchType FROM F9.Entity WHERE Configuration_ID = 83",
+                "      Request Snippet: /services/rest/connect/latest/queryResults | query=SELECT *,TableType.lookupName as TableType,CallSearchType.lookupName as CallSearchType,TextSearchType.lookupName as TextSearchType FROM F9.Entity WHERE Configuration_ID = 83",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=5, dns=0, connect=0, ssl=0, send=1, wait=312, receive=2",
+                "      Response Size: 518 bytes",
+                "      Response Snippet: {\"items\":[{\"tableName\":\"Table0\",\"count\":0,\"columnNames\":[\"CallSearchQuery\",\"CallSearchType\",\"CampaignName\",\"Configuration_ID\",\"CreateNewRecord\",\"CreatedByAccount\",\"createdTime\",\"DefaultRecordParameters\",\"DisplayLabel\",\"EmailFields\",\"EnableClickToDial\",\"id\",\"Mu",
+                "",
+                "  [23] GET 200 6ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sS%22%3Anull%2C%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2250331771%22%2C%22dV%22%3Anull%2C%22lt%22%3A1%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22MenuItemId%22%2C%22vl%22%3A605%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sS\":null,\"sT\":\"Menu\",\"sI\":\"50331771\",\"dV\":null,\"lt\":1,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"MenuItemId\",\"vl\":605,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, MenuItemId",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":true,\"items\":[{\"id\":605,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Security tag\",\"level\":1,\"parent\":false,\"enabled\":true,\"sequence\":8,\"moreChildren\":false,\"visibleChildIdsCalculated\":false,\"child",
+                "",
+                "  [24] GET 200 6ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1254%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"13\",\"dV\":null,\"lt\":200,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"Id\",\"vl\":1254,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, Id",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":true,\"items\":[{\"id\":893,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Placing an order\",\"level\":1,\"parent\":true,\"enabled\":true,\"sequence\":14,\"moreChildren\":true,\"visibleChildIds\":[1246,941,1254,1356",
+                "",
+                "  [25] GET 200 5ms  https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2250331771%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A605%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Classification: Search | MEDIUM confidence | score=6",
+                "      Request Snippet: /AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch | menuSearchCriteria=[{\"sT\":\"Menu\",\"sI\":\"50331771\",\"dV\":null,\"lt\":200,\"fr\":{\"fO\":\"none\",\"ch\":null,\"fT\":{\"nm\":\"Id\",\"vl\":605,\"cn\":\"isEqual\"}},\"sIn\":0,\"isMin\":true,\"sPVC\":false,\"isVI\":false}], c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                "      Result Count: 1",
+                "      Timings(ms): blocked=4, dns=0, connect=0, ssl=0, send=0, wait=1, receive=1",
+                "      Product Names: Menu, Id",
+                "      Response Snippet: [{\"resultSets\":[{\"name\":\"Menu\",\"count\":1,\"moreItems\":false,\"moreChildren\":true,\"items\":[{\"id\":605,\"typeId\":0,\"type\":\"Menu\",\"label\":\"Security tag\",\"level\":1,\"parent\":false,\"enabled\":true,\"sequence\":8,\"moreChildren\":false,\"visibleChildIdsCalculated\":false,\"child",
+                "",
+                "JSON summary written to: C:\\Users\\LBICKE~1\\AppData\\Local\\Temp\\har_summary_a178703b8f284cb69002101fe174d84a.json",
+                {
+                    "file_path":  "..\\Cesar HAR 1.har",
+                    "total_requests":  607,
+                    "unique_endpoints":  39,
+                    "duplicate_requests":  92,
+                    "failed_call_count":  1,
+                    "slow_call_count":  1,
+                    "stalled_call_count":  1,
+                    "top_domains":  [
+                                        {
+                                            "domain":  "lululemon.custhelp.com",
+                                            "count":  186
+                                        },
+                                        {
+                                            "domain":  "app-scl.five9.com",
+                                            "count":  110
+                                        },
+                                        {
+                                            "domain":  "lululemon.goquiq.com",
+                                            "count":  66
+                                        },
+                                        {
+                                            "domain":  "api.prod.us.five9.net",
+                                            "count":  41
+                                        },
+                                        {
+                                            "domain":  "app.five9.com",
+                                            "count":  24
+                                        }
+                                    ],
+                    "category_counts":  {
+                                            "Static Assets":  116,
+                                            "Unknown":  363,
+                                            "Search":  19,
+                                            "Autocomplete / Recommendations":  1,
+                                            "Telemetry / Analytics":  10,
+                                            "Ads / Marketing":  6
+                                        },
+                    "failure_reason_counts":  {
+                                                  "high queue/blocked time":  10,
+                                                  "very slow total duration":  3,
+                                                  "long server wait (TTFB)":  4,
+                                                  "client or auth error response":  4,
+                                                  "slow total duration":  1
+                                              },
+                    "top_failed_or_stalled":  [
+                                                  {
+                                                      "started_at":  "2026-06-10T12:03:34.426Z",
+                                                      "method":  "GET",
+                                                      "status":  400,
+                                                      "duration_ms":  5546.664999999848,
+                                                      "url":  "https://lululemon.custhelp.com/services/rest/connect/latest/tasks?q=CustomFields.c.five9_agent%20=%20%27null%27%20and%20completedTime%20between%20%272026-06-09T23:00:00.000Z%27%20and%20%272026-06-10T23:00:00.000Z%27%20and%20CustomFields.c.five9_sessionId%20is%20not%20null",
+                                                      "domain":  "lululemon.custhelp.com",
+                                                      "wait_ms":  5540.093999999937,
+                                                      "blocked_ms":  5.128999999201857,
+                                                      "occurrence_count":  1,
+                                                      "hang_reasons":  [
+                                                                           "client or auth error response",
+                                                                           "slow total duration",
+                                                                           "long server wait (TTFB)"
+                                                                       ],
+                                                      "severity":  16.5
+                                                  }
+                                              ],
+                    "timeline":  [
+                                     {
+                                         "started_at":  "2026-06-10T12:02:34.764Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  304.6180000001186,
+                                         "url":  "https://lululemon.custhelp.com/services/rest/connect/latest/queryResults?query=SELECT%20*,DataCenter.lookupName%20as%20DataCenter,%20NoMatchRule.lookupName%20as%20NoMatchRule,MultiMatchRule.lookupName%20as%20MultiMatchRule,DefaultSearchRule.lookupName%20as%20DefaultSearchRule%20FROM%20F9.Configuration%20WHERE%20Profile.id%20=%20281",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  298.9930000007239,
+                                         "blocked_ms":  4.346000000590691,
+                                         "occurrence_count":  2,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:35.107Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  611.8319999986852,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/contextmanager/v.32603230003/navigationContext/quickSearchNavigationSet",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  599.3659999992739,
+                                         "blocked_ms":  10.855999999556342,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:36.100Z",
+                                         "method":  "GET",
+                                         "status":  304,
+                                         "duration_ms":  191.26700000015262,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2222%22%2C%22dV%22%3Anull%2C%22lt%22%3A500%2C%22fr%22%3Anull%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2217%22%2C%22dV%22%3Anull%2C%22lt%22%3A500%2C%22fr%22%3Anull%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  183.99999999946797,
+                                         "blocked_ms":  5.373999998878688,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:40.889Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  247.2940000006929,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%221272%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221271%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  239.3669999999576,
+                                         "blocked_ms":  5.82000000040466,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:41.220Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  5.785999999716296,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221254%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  0.8690000000575091,
+                                         "blocked_ms":  3.8240000007130437,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:41.496Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  232.25099999945087,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%221276%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3A%7B%22mId%22%3A%221112%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Atrue%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  223.72300000068137,
+                                         "blocked_ms":  6.438999999232008,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:41.763Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  218.74299999944924,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3A%7B%22mId%22%3A%2253%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  212.2459999991333,
+                                         "blocked_ms":  4.347000000348315,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:47.156Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  224.47399999873596,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2219%22%2C%22dV%22%3A%7B%22mId%22%3A%222%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%2C%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2243%22%2C%22dV%22%3A%7B%22mId%22%3A%2237%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22GroupsSelectable%22%2C%22vl%22%3A0%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  215.19099999911188,
+                                         "blocked_ms":  7.2289999986061595,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:47.158Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  387.82700000047043,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%222%22%2C%22dV%22%3A%7B%22mId%22%3A%2215707290%22%2C%22nDI%22%3Atrue%7D%2C%22lt%22%3A500%2C%22fr%22%3A%7B%22fO%22%3A%22and%22%2C%22ch%22%3A%5B%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22ControlContext%22%2C%22vl%22%3A%22Incident%22%2C%22cn%22%3A%22isEqual%22%7D%7D%5D%2C%22fT%22%3Anull%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  379.87299999952864,
+                                         "blocked_ms":  6.145000001045876,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:47.820Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  183.37200000132725,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/contextmanager/v.32603230003/userSettingsContext/chatSuggestionPanelUndocked",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Autocomplete / Recommendations",
+                                         "wait_ms":  176.9349999991724,
+                                         "blocked_ms":  4.994000000839355,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:52.612Z",
+                                         "method":  "POST",
+                                         "status":  204,
+                                         "duration_ms":  39.50299999996787,
+                                         "url":  "https://lululemon.quiq-api.com/cdn-cgi/rum?",
+                                         "domain":  "lululemon.quiq-api.com",
+                                         "category":  "Telemetry / Analytics",
+                                         "wait_ms":  33.97099999970035,
+                                         "blocked_ms":  4.04000000072096,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:02:56.710Z",
+                                         "method":  "POST",
+                                         "status":  200,
+                                         "duration_ms":  963.9399999991282,
+                                         "url":  "https://lululemon.goquiq.com/api/v1/token/generate?trackingId=tid.1781018796690.a494f177e69bb49627\u0026quiqVersion=2.16.142\u0026oid=-6gwue0",
+                                         "domain":  "lululemon.goquiq.com",
+                                         "category":  "Telemetry / Analytics",
+                                         "wait_ms":  156.79799999918896,
+                                         "blocked_ms":  2.55700000014971,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:02.050Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  210.7689999993454,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2243%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A37%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  202.24600000045413,
+                                         "blocked_ms":  6.486999998479849,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:02.742Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  330.19700000113517,
+                                         "url":  "https://lululemon.goquiq.com/external/configs/settings?config=EGRESS_ALLOWED_DOMAINS_SETTINGS\u0026config=ACCOUNT_EMAIL_DOMAIN_SETTINGS\u0026config=DYNAMICS_CONTACT_CUSTOM_RELATIONSHIP_FIELD_CONFIGURATION\u0026config=ESCAPE_CSV_FIELDS_CONFIG\u0026config=TIME_AVAILABLE_COLUMN_MODE\u0026config=TIME_AVAILABLE_COLUMN_QUERY_PERCENTAGE\u0026config=REACTIVATED_CONVOS_GO_TO_BACK_OF_QUEUE\u0026config=INITIAL_AGENT_STATUS\u0026config=DEFAULT_AGENT_STATUS\u0026config=WORK_ITEM_INVITATIONS_DISABLED\u0026config=DEFAULT_ALLOWED_USER_CONTENT_TYPES\u0026config=DEFAULT_REDIRECT_TO\u0026config=TWILIO_ADMIN_UI_ADMIN_ENABLED\u0026config=SENTIMENT_ANALYSIS_MODE\u0026config=CONVERSATIONAL_COMMERCE_ENABLED\u0026config=AUTO_RESPONSE_MODE\u0026config=AGENT_STOP_LIST_ENABLED\u0026config=CHAT_ABANDONMENT_TIMER\u0026config=SOFT_ASSIGNMENT_LIMIT\u0026config=HARD_ASSIGNMENT_LIMIT\u0026config=CARD_DEMOTION_CONFIGURATION\u0026config=IP_WHITELIST\u0026config=DEFAULT_LANGUAGES\u0026config=AUTO_MESSAGE_TRANSLATION_ENABLED\u0026config=TRENDS_USE_DOWN_SAMPLES\u0026config=TRENDS_RAW_SAMPLE_RANGE_SECONDS\u0026config=REMOTE_QUEUEING_CONFIGURATION\u0026config=REMOTE_QUEUEING_MANAGED_USER\u0026config=OMNI_HARD_LIMIT_ADDITIONAL_PERCENT\u0026config=COMMON_WRITTEN_LANGUAGES\u0026config=MAX_GLOBAL_BRAND_COUNT\u0026config=MAX_GLOBAL_USE_CASE_COUNT\u0026config=INLINE_FIELD_SUGGESTIONS_ENABLED\u0026config=MERGE_MESSAGE_DEFINITIONS\u0026config=CONVERSATION_SUMMARIES_ENABLED\u0026config=CONSIDERED_PII_FIELD_LIST\u0026config=MANAGER_ALLOW_CONVO_SEARCH_PII_FIELDS\u0026config=MANAGER_ALLOW_CONVO_EXPORT_PII_FIELDS\u0026config=DATA_FRAME_RUNTIME\u0026config=EXPERIMENTAL_DATA_FRAMES_ENABLED\u0026config=DATASET_CARDINALITY_CONFIG\u0026config=CONVERSATION_SUMMARY_CONFIGURATION\u0026config=QUIQ_STT_ENABLE_KEYWORD_BOOSTS\u0026config=NOTIFICATION_REPLIES_RECEIVED_WEBHOOK_VISIBLE\u0026config=INBOUND_MESSAGES_RECEIVED_WEBHOOK_VISIBLE\u0026config=PARSE_FOR_HALLPASS_CONTEXT\u0026config=WHATSAPP_PARSE_FOR_HALLPASS_CONTEXT\u0026config=BOT_LLM_RETRY_OPTIONS\u0026config=PREVENT_MIXED_ROLES\u0026config=PREVENT_MIXED_QUEUES\u0026config=QUEUE_WITH_AGENT_SEGMENT_STATS_SETTINGS\u0026config=RING_MASTER_TENANT_MUST_AUTH_INBOUND_CALLS\u0026config=REPORTS_UI_AGENT_SEGMENT_SELECTOR_OPTIONS\u0026config=ROLE_BASED_TWO_FACTOR_ENFORCEMENT\u0026config=EXPOSE_NOTIFICATION_LOGIC_IN_SURVEY_CONTEXT\u0026config=CHAT_VARIABLE_REPLACEMENT_ENABLED\u0026config=CM_MESSAGING_KEYS_META_VISIBLE\u0026config=CONTACT_POINT_ADDITIONAL_APPLE_BIZ_IDS\u0026config=CONVERSATION_SCOPE_CONFIG\u0026config=AI_SERVICE_ENABLE_INTERNAL_EXECUTION\u0026config=MAXIMUM_THINKING_SOUND_COUNT\u0026config=MAXIMUM_THINKING_SOUND_SIZE\u0026config=THINKING_SOUND_CONTENT_TYPES\u0026config=MAXIMUM_AUDIO_COUNT\u0026config=MAXIMUM_AUDIO_SIZE\u0026config=AUDIO_CONTENT_TYPES\u0026config=AI_ASSISTANT_ALT_SUGGESTIONS_ENABLED\u0026config=OTP_SETUP_EXPOSE_ADDITIONAL_DETAILS\u0026config=VOICE_EMIT_CONTROL_MESSAGES\u0026config=RCS_PARSE_FOR_HALLPASS_CONTEXT\u0026config=MFA_SETUP_REQUIRE_EMAILED_CODE\u0026config=EA_BREAKDOWNS_INCLUDE_COLUMN_TOTALS\u0026config=DEEP_QUEUE_ACTIONS_ENABLED\u0026config=HACKATHON_CLOSED_CAPTION\u0026config=AGENT_EXTERNAL_ID_VISIBLE_FOR_WEBHOOKS\u0026config=CONTACT_EVENT_AI_AGENT_TRIGGERS_ENABLED\u0026registrants=message-ui",
+                                         "domain":  "lululemon.goquiq.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  181.4280000000681,
+                                         "blocked_ms":  3.09099999991816,
+                                         "occurrence_count":  2,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:02.751Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  134.48799999969197,
+                                         "url":  "https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=sessionInitialized\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%7D\u0026cb=1781092982750-3815",
+                                         "domain":  "esp.aptrinsic.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  126.33300000048557,
+                                         "blocked_ms":  6.551000000331784,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:02.763Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  127.3670000009588,
+                                         "url":  "https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=pageview\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%7D\u0026cb=1781092982762-6612",
+                                         "domain":  "esp.aptrinsic.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  122.04400000013365,
+                                         "blocked_ms":  4.099000000545755,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:02.824Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  6.220000001121662,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1272%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  0.9849999996484258,
+                                         "blocked_ms":  4.202000001011766,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:03.014Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  132.79400000101305,
+                                         "url":  "https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=identify\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026ep=%7B%22usf%22%3A%7B%22ide%22%3A%22E6FRXQ272ECFYSSWZ6LRMB7COMKAJYMY%22%2C%22customAttributes%22%3A%7B%7D%2C%22accountId%22%3A%22122698%22%7D%2C%22acf%22%3A%7B%22id%22%3A%22122698%22%2C%22customAttributes%22%3A%7B%22domainId%22%3A%22122698%22%2C%22jurisdictionId%22%3A%22us%22%7D%7D%7D\u0026cb=1781092983013-5843",
+                                         "domain":  "esp.aptrinsic.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  128.37499999993247,
+                                         "blocked_ms":  3.0849999997759006,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:03.196Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  131.31199999952514,
+                                         "url":  "https://esp.aptrinsic.com/rte/v1/command?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026et=custom\u0026rf=https%3A%2F%2Flululemon.custhelp.com%2F\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026sch=0\u0026scw=0\u0026pt=Adapter\u0026cet=Login\u0026ep=%7B%22epr%22%3A%7B%22application%22%3A%22ADT%22%2C%22appKey%22%3A%22ADT%22%2C%22uiMode%22%3A%22Responsive%22%2C%22deploymentType%22%3A%22freedom%22%2C%22crmWorkspace%22%3A%22NA%22%2C%22uiVersion%22%3A%222025.11.18%22%2C%22extensionVersion%22%3A%22na%22%7D%7D\u0026cb=1781092983195-8644",
+                                         "domain":  "esp.aptrinsic.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  127.07300000036939,
+                                         "blocked_ms":  3.0380000000233993,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:04.299Z",
+                                         "method":  "GET",
+                                         "status":  204,
+                                         "duration_ms":  124.85500000002503,
+                                         "url":  "https://esp.aptrinsic.com/rte/v1/inapp?p=AP-90IIBSPWGVRN-2\u0026sv=0.59.9\u0026v=AP-90IIBSPWGVRN-2-1781018159072-63919234\u0026ai=5d089816-c2c8-48b7-be3c-2ae31c5ed7ab\u0026vt=2\u0026s=AP-90IIBSPWGVRN-2-1781092982739-64187769\u0026sc=https%3A%2F%2F\u0026ho=app.five9.com\u0026pa=%2Fclients%2Fintegrations%2Fadt.li.main.html\u0026q=%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026ha\u0026u=app.five9.com%2Fclients%2Fintegrations%2Fadt.li.main.html%3Ff9crmapi%3Dtrue%26f9verticalthreshold%3D500px%26idpLoginUrl%3Dhttps%3A%2F%2Fmyapps.microsoft.com%2Fsignin%2FFive9%2520for%2520Oracle%2520Service%2520Cloud%2F251d4d46579f4905abe399298fd09143\u0026gcx=%7B%7D\u0026cb=1781092984298-9767",
+                                         "domain":  "esp.aptrinsic.com",
+                                         "category":  "Unknown",
+                                         "wait_ms":  120.80199999967218,
+                                         "blocked_ms":  2.803000000053551,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:06.869Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  5.943000000115717,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2210%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1276%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  1.0229999991887015,
+                                         "blocked_ms":  3.93899999987951,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:07.688Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  319.86499999948137,
+                                         "url":  "https://lululemon.custhelp.com/services/rest/connect/latest/queryResults?query=SELECT%20*,TableType.lookupName%20as%20TableType,CallSearchType.lookupName%20as%20CallSearchType,TextSearchType.lookupName%20as%20TextSearchType%20FROM%20F9.Entity%20WHERE%20Configuration_ID%20=%2083",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  312.401999999418,
+                                         "blocked_ms":  5.211999998989631,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:07.744Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  5.773000000772299,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sS%22%3Anull%2C%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2250331771%22%2C%22dV%22%3Anull%2C%22lt%22%3A1%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22MenuItemId%22%2C%22vl%22%3A605%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  0.9500000002395828,
+                                         "blocked_ms":  3.9229999996217666,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:08.284Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  6.208000000697211,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2213%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A1254%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  0.8849999993349192,
+                                         "blocked_ms":  4.251999998950399,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     },
+                                     {
+                                         "started_at":  "2026-06-10T12:03:08.798Z",
+                                         "method":  "GET",
+                                         "status":  200,
+                                         "duration_ms":  5.4439999985334,
+                                         "url":  "https://lululemon.custhelp.com/AgentWeb/api/searchmanager/v.32603230003/menu/batchSearch?menuSearchCriteria=%5B%7B%22sT%22%3A%22Menu%22%2C%22sI%22%3A%2250331771%22%2C%22dV%22%3Anull%2C%22lt%22%3A200%2C%22fr%22%3A%7B%22fO%22%3A%22none%22%2C%22ch%22%3Anull%2C%22fT%22%3A%7B%22nm%22%3A%22Id%22%2C%22vl%22%3A605%2C%22cn%22%3A%22isEqual%22%7D%7D%2C%22sIn%22%3A0%2C%22isMin%22%3Atrue%2C%22sPVC%22%3Afalse%2C%22isVI%22%3Afalse%7D%5D\u0026c=RHZUUEdWdU1aVURGNnRYOXp4ZnJPNUZPSGphNm16MTZHRWRHeQ==",
+                                         "domain":  "lululemon.custhelp.com",
+                                         "category":  "Search",
+                                         "wait_ms":  0.9500000006537884,
+                                         "blocked_ms":  3.5059999999193243,
+                                         "occurrence_count":  1,
+                                         "hang_reasons":  [
+
+                                                          ]
+                                     }
+                                 ]
+                }
+            ],
+    "har_failure_rate":  0.0016474464579901153,
+    "har_stall_rate":  0.0016474464579901153,
+    "verdict":  "Network-layer",
+    "protocol_evidence":  {
+                              "quic":  true,
+                              "http2":  false,
+                              "tcp":  true
+                          },
+    "top_har_failed_or_stalled":  [
+                                      {
+                                          "started_at":  "2026-06-10T12:03:34.426Z",
+                                          "method":  "GET",
+                                          "status":  400,
+                                          "duration_ms":  5546.664999999848,
+                                          "url":  "https://lululemon.custhelp.com/services/rest/connect/latest/tasks?q=CustomFields.c.five9_agent%20=%20%27null%27%20and%20completedTime%20between%20%272026-06-09T23:00:00.000Z%27%20and%20%272026-06-10T23:00:00.000Z%27%20and%20CustomFields.c.five9_sessionId%20is%20not%20null",
+                                          "domain":  "lululemon.custhelp.com",
+                                          "wait_ms":  5540.093999999937,
+                                          "blocked_ms":  5.128999999201857,
+                                          "occurrence_count":  1,
+                                          "hang_reasons":  [
+                                                               "client or auth error response",
+                                                               "slow total duration",
+                                                               "long server wait (TTFB)"
+                                                           ],
+                                          "severity":  16.5
+                                      }
+                                  ],
+    "top_netlog_failed_hosts":  [
+                                    {
+                                        "host":  "app-scl.five9.com",
+                                        "count":  2
+                                    },
+                                    {
+                                        "host":  "api.prod.us.five9.net",
+                                        "count":  1
+                                    },
+                                    {
+                                        "host":  "bcvipph02.rightnowtech.com",
+                                        "count":  1
+                                    },
+                                    {
+                                        "host":  "lululemon.goquiq.com",
+                                        "count":  1
+                                    },
+                                    {
+                                        "host":  "web-sdk.aptrinsic.com",
+                                        "count":  1
+                                    }
+                                ],
+    "primary_har_stalled_call":  {
+                                     "started_at":  "2026-06-10T12:03:34.426Z",
+                                     "method":  "GET",
+                                     "status":  400,
+                                     "duration_ms":  5546.664999999848,
+                                     "url":  "https://lululemon.custhelp.com/services/rest/connect/latest/tasks?q=CustomFields.c.five9_agent%20=%20%27null%27%20and%20completedTime%20between%20%272026-06-09T23:00:00.000Z%27%20and%20%272026-06-10T23:00:00.000Z%27%20and%20CustomFields.c.five9_sessionId%20is%20not%20null",
+                                     "domain":  "lululemon.custhelp.com",
+                                     "wait_ms":  5540.093999999937,
+                                     "blocked_ms":  5.128999999201857,
+                                     "occurrence_count":  1,
+                                     "hang_reasons":  [
+                                                          "client or auth error response",
+                                                          "slow total duration",
+                                                          "long server wait (TTFB)"
+                                                      ],
+                                     "severity":  16.5
+                                 },
+    "nearest_netlog_errors":  [
+
+                              ],
+    "shared_failing_hosts":  [
+                                 "api.prod.us.five9.net",
+                                 "app-scl.five9.com",
+                                 "lululemon.goquiq.com"
+                             ],
+    "overall_recommendation":  "Cross-source overlap found on multiple hosts. Focus first on shared host/service health and edge/network path consistency.",
+    "error_delta":  [
+                        {
+                            "error":  "ERR_ADDRESS_UNREACHABLE",
+                            "netlog":  24,
+                            "har":  0,
+                            "delta":  24
+                        },
+                        {
+                            "error":  "high queue/blocked time",
+                            "netlog":  0,
+                            "har":  10,
+                            "delta":  -10
+                        },
+                        {
+                            "error":  "ERR_IO_PENDING",
+                            "netlog":  6,
+                            "har":  0,
+                            "delta":  6
+                        },
+                        {
+                            "error":  "client or auth error response",
+                            "netlog":  0,
+                            "har":  4,
+                            "delta":  -4
+                        },
+                        {
+                            "error":  "long server wait (TTFB)",
+                            "netlog":  0,
+                            "har":  4,
+                            "delta":  -4
+                        },
+                        {
+                            "error":  "very slow total duration",
+                            "netlog":  0,
+                            "har":  3,
+                            "delta":  -3
+                        },
+                        {
+                            "error":  "ERR_ABORTED",
+                            "netlog":  2,
+                            "har":  0,
+                            "delta":  2
+                        },
+                        {
+                            "error":  "ERR_WS_UPGRADE",
+                            "netlog":  2,
+                            "har":  0,
+                            "delta":  2
+                        },
+                        {
+                            "error":  "ERR_FAILED",
+                            "netlog":  1,
+                            "har":  0,
+                            "delta":  1
+                        },
+                        {
+                            "error":  "slow total duration",
+                            "netlog":  0,
+                            "har":  1,
+                            "delta":  -1
+                        }
+                    ]
+}

@@ -189,6 +189,136 @@ function Resolve-ScoreColor {
     return "White"
 }
 
+function Try-GetEpochMs {
+    param([object]$Value)
+
+    if ($null -eq $Value) {
+        return $null
+    }
+
+    $text = [string]$Value
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        return $null
+    }
+
+    [double]$num = 0
+    if ([double]::TryParse($text, [ref]$num)) {
+        if ($num -ge 1000000000000) {
+            return [double]$num
+        }
+        if ($num -ge 1000000000) {
+            return [double]($num * 1000)
+        }
+        return $null
+    }
+
+    [datetimeoffset]$dto = [datetimeoffset]::MinValue
+    if ([datetimeoffset]::TryParse($text, [ref]$dto)) {
+        return [double]$dto.ToUnixTimeMilliseconds()
+    }
+
+    return $null
+}
+
+function Get-NetLogHostCounts {
+    param([object[]]$Timeline)
+
+    $counts = @{}
+    foreach ($row in @($Timeline)) {
+        $hostName = Normalize-Host -Value ([string]$row.host)
+        if (-not $hostName -or $hostName -eq "-") {
+            continue
+        }
+        if (-not $counts.ContainsKey($hostName)) {
+            $counts[$hostName] = 0
+        }
+        $counts[$hostName] = [int]$counts[$hostName] + 1
+    }
+    return $counts
+}
+
+function Get-TopHarFailedOrStalledRows {
+    param([object]$HarSummary, [int]$Top = 5)
+
+    $rows = @()
+    if ($null -ne $HarSummary.top_failed_or_stalled) {
+        $rows = @($HarSummary.top_failed_or_stalled)
+    }
+
+    if ($rows.Count -eq 0) {
+        $rows = @($HarSummary.timeline | Where-Object {
+            ([int]$_.status -eq 0) -or
+            ([int]$_.status -ge 400) -or
+            ([double]$_.wait_ms -ge 4000) -or
+            ([double]$_.blocked_ms -ge 1000)
+        })
+    }
+
+    return @($rows | Select-Object -First $Top)
+}
+
+function Resolve-LayerVerdict {
+    param(
+        [object]$NetLogAssessment,
+        [double]$HarFailureRate,
+        [double]$HarStallRate,
+        [int]$SharedHostCount
+    )
+
+    $local = [int]$NetLogAssessment.local_signature_count
+    $network = [int]$NetLogAssessment.network_signature_count
+    $harHot = ($HarFailureRate -ge 0.20 -or $HarStallRate -ge 0.20)
+    $netlogLocalHot = ($local -gt $network -and [int]$NetLogAssessment.score -ge 55)
+    $netlogNetworkHot = ($network -ge $local -and $network -ge 3)
+
+    if ($harHot -and $netlogNetworkHot) {
+        return "Network-layer"
+    }
+
+    if ((-not $harHot) -and $netlogLocalHot) {
+        return "App-layer"
+    }
+
+    if ($harHot -and $netlogLocalHot) {
+        return "Mixed"
+    }
+
+    if ($SharedHostCount -ge 3) {
+        return "Network-layer"
+    }
+
+    return "Mixed"
+}
+
+function Get-ProtocolEvidence {
+    param([object]$NetLogSummary)
+
+    $eventTypes = Get-CounterFromObject -ObjectValue $NetLogSummary.error_event_type_counts
+    $quic = $false
+    $http2 = $false
+    $tcp = $false
+
+    foreach ($name in $eventTypes.Keys) {
+        $upper = ([string]$name).ToUpperInvariant()
+        if ($upper.Contains("QUIC")) { $quic = $true }
+        if ($upper.Contains("HTTP2") -or $upper.Contains("HTTP_STREAM")) { $http2 = $true }
+        if ($upper.Contains("TCP") -or $upper.Contains("SOCKET") -or $upper.Contains("CONNECT")) { $tcp = $true }
+    }
+
+    if (-not $quic -and $null -ne $NetLogSummary.event_categories) {
+        $categoryMap = Get-CounterFromObject -ObjectValue $NetLogSummary.event_categories
+        if ($categoryMap.ContainsKey("QUIC") -and [int]$categoryMap["QUIC"] -gt 0) {
+            $quic = $true
+        }
+    }
+
+    return [pscustomobject]@{
+        quic = $quic
+        http2 = $http2
+        tcp = $tcp
+    }
+}
+
 try {
     Write-Host "`n===== NetLog vs HAR Comparison =====" -ForegroundColor Cyan
     Write-Host "NetLog: $NetLogLabel -> $NetLogPath"
@@ -201,11 +331,22 @@ try {
 
     $netlogErrors = Get-CounterFromObject -ObjectValue $netlogSummary.error_counts
     $harFailureReasons = Get-CounterFromObject -ObjectValue $harSummary.failure_reason_counts
+    $topHarFailedOrStalled = @(Get-TopHarFailedOrStalledRows -HarSummary $harSummary -Top 8)
+    $netlogHostCounts = Get-NetLogHostCounts -Timeline @($netlogSummary.timeline)
+    $topNetLogHosts = @(
+        $netlogHostCounts.GetEnumerator() |
+            Sort-Object -Property @{Expression = "Value"; Descending = $true}, @{Expression = "Name"; Descending = $false} |
+            Select-Object -First 8
+    )
 
     $topDiff = Get-TopDifferenceRows -NetLogCounts $netlogErrors -HarCounts $harFailureReasons -Top 10
 
     $netlogAffected = @($netlogSummary.affected_hosts)
     $harTopDomains = @($harSummary.top_domains | ForEach-Object { [string]$_.domain })
+    $harFailedDomains = @($topHarFailedOrStalled | ForEach-Object { [string]$_.domain })
+    if ($harFailedDomains.Count -gt 0) {
+        $harTopDomains = @($harTopDomains + $harFailedDomains)
+    }
 
     $harDomainSet = New-Object System.Collections.Generic.HashSet[string]
     foreach ($domain in $harTopDomains) {
@@ -224,6 +365,44 @@ try {
     $harFailureRate = [double]$harSummary.failed_call_count / $harTotalRequests
     $harStallRate = [double]$harSummary.stalled_call_count / $harTotalRequests
     $scoreColor = Resolve-ScoreColor -Score ([int]$netlogAssessment.score)
+    $verdict = Resolve-LayerVerdict `
+        -NetLogAssessment $netlogAssessment `
+        -HarFailureRate $harFailureRate `
+        -HarStallRate $harStallRate `
+        -SharedHostCount $commonFailingTargets.Count
+    $protocolEvidence = Get-ProtocolEvidence -NetLogSummary $netlogSummary
+
+    $primaryStalledHar = $null
+    if ($topHarFailedOrStalled.Count -gt 0) {
+        $primaryStalledHar = @($topHarFailedOrStalled | Select-Object -First 1)[0]
+    }
+
+    $nearestNetlogErrors = @()
+    if ($null -ne $primaryStalledHar) {
+        $harEpoch = Try-GetEpochMs -Value $primaryStalledHar.started_at
+        if ($null -ne $harEpoch) {
+            $nearestNetlogErrors = @(
+                $netlogSummary.timeline |
+                    ForEach-Object {
+                        $netEpoch = Try-GetEpochMs -Value $_.time
+                        if ($null -eq $netEpoch) {
+                            return $null
+                        }
+                        [pscustomobject]@{
+                            host = $_.host
+                            error_name = $_.error_name
+                            event_type = $_.event_type
+                            phase = $_.phase
+                            time = $_.time
+                            delta_ms = [Math]::Abs([double]$netEpoch - [double]$harEpoch)
+                        }
+                    } |
+                    Where-Object { $null -ne $_ } |
+                    Sort-Object -Property delta_ms, host |
+                    Select-Object -First 5
+            )
+        }
+    }
 
     $overall = Resolve-OverallRecommendation `
         -NetLogScore ([int]$netlogAssessment.score) `
@@ -247,8 +426,30 @@ try {
     Write-Host "  Failed Calls: $($harSummary.failed_call_count)"
     Write-Host "  Slow Calls: $($harSummary.slow_call_count)"
     Write-Host "  Stalled Calls: $($harSummary.stalled_call_count)"
-    Write-Host "  Failure Rate: {0:P1}" -f $harFailureRate
-    Write-Host "  Stall Rate: {0:P1}" -f $harStallRate
+    Write-Host ("  Failure Rate: {0:P1}" -f $harFailureRate)
+    Write-Host ("  Stall Rate: {0:P1}" -f $harStallRate)
+
+    Write-Host ""
+    Write-Host "--- Top HAR Failed/Stalled URLs ---" -ForegroundColor Yellow
+    if ($topHarFailedOrStalled.Count -eq 0) {
+        Write-Host "  None"
+    }
+    else {
+        foreach ($row in $topHarFailedOrStalled) {
+            Write-Host "  $($row.method) $($row.status) $([Math]::Round([double]$row.duration_ms, 0))ms | $($row.url)"
+        }
+    }
+
+    Write-Host ""
+    Write-Host "--- Top NetLog Failed Hosts ---" -ForegroundColor Yellow
+    if ($topNetLogHosts.Count -eq 0) {
+        Write-Host "  None"
+    }
+    else {
+        foreach ($hostRow in $topNetLogHosts) {
+            Write-Host "  $($hostRow.Name): $($hostRow.Value)"
+        }
+    }
 
     Write-Host ""
     Write-Host "--- NetLog Error vs HAR Failure-Signal Delta (Top 10) ---" -ForegroundColor Yellow
@@ -271,6 +472,41 @@ try {
     }
 
     Write-Host ""
+    Write-Host "--- HAR Timing of Stalled Call ---" -ForegroundColor Yellow
+    if ($null -eq $primaryStalledHar) {
+        Write-Host "  No failed/stalled HAR call found."
+    }
+    else {
+        Write-Host "  URL: $($primaryStalledHar.url)"
+        Write-Host "  Status: $($primaryStalledHar.status)"
+        Write-Host "  Duration: $([Math]::Round([double]$primaryStalledHar.duration_ms, 0))ms"
+        Write-Host "  Wait: $([Math]::Round([double]$primaryStalledHar.wait_ms, 0))ms"
+        Write-Host "  Blocked: $([Math]::Round([double]$primaryStalledHar.blocked_ms, 0))ms"
+        Write-Host "  StartedAt: $($primaryStalledHar.started_at)"
+    }
+
+    Write-Host ""
+    Write-Host "--- Nearest NetLog Errors by Timestamp ---" -ForegroundColor Yellow
+    if ($nearestNetlogErrors.Count -eq 0) {
+        Write-Host "  Unable to compute nearest-by-time matches (timestamp bases may differ or be relative)."
+    }
+    else {
+        foreach ($near in $nearestNetlogErrors) {
+            Write-Host "  host=$($near.host) error=$($near.error_name) type=$($near.event_type) phase=$($near.phase) time=$($near.time) delta_ms=$([Math]::Round([double]$near.delta_ms, 0))"
+        }
+    }
+
+    Write-Host ""
+    Write-Host "--- Protocol Evidence: QUIC / HTTP2 / TCP ---" -ForegroundColor Yellow
+    Write-Host "  QUIC:  $($protocolEvidence.quic)"
+    Write-Host "  HTTP2: $($protocolEvidence.http2)"
+    Write-Host "  TCP:   $($protocolEvidence.tcp)"
+
+    Write-Host ""
+    Write-Host "--- Verdict: App-layer vs Network-layer vs Mixed ---" -ForegroundColor Yellow
+    Write-Host "  $verdict"
+
+    Write-Host ""
     Write-Host "--- Overall Recommendation ---" -ForegroundColor Green
     Write-Host "  $overall"
 
@@ -284,6 +520,17 @@ try {
         har = $harSummary
         har_failure_rate = $harFailureRate
         har_stall_rate = $harStallRate
+        verdict = $verdict
+        protocol_evidence = $protocolEvidence
+        top_har_failed_or_stalled = @($topHarFailedOrStalled)
+        top_netlog_failed_hosts = @($topNetLogHosts | ForEach-Object {
+            [pscustomobject]@{
+                host = $_.Name
+                count = $_.Value
+            }
+        })
+        primary_har_stalled_call = $primaryStalledHar
+        nearest_netlog_errors = @($nearestNetlogErrors)
         shared_failing_hosts = ($commonFailingTargets | Sort-Object -Unique)
         overall_recommendation = $overall
         error_delta = @($topDiff | ForEach-Object {
