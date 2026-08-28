@@ -189,6 +189,21 @@ function Resolve-ScoreColor {
     return "White"
 }
 
+function Resolve-CountColor {
+    param([int]$Count)
+
+    if ($Count -gt 0) { return "Yellow" }
+    return "Green"
+}
+
+function Resolve-DeltaColor {
+    param([int]$Delta)
+
+    if ($Delta -gt 0) { return "Yellow" }
+    if ($Delta -lt 0) { return "Cyan" }
+    return "Green"
+}
+
 function Try-GetEpochMs {
     param([object]$Value)
 
@@ -416,18 +431,18 @@ try {
     Write-Host "  Browser Hint: $($netlogSummary.browser_hint)"
     Write-Host "  Local Reinstall Signal Score: $($netlogAssessment.score)/100" -ForegroundColor $scoreColor
     Write-Host "  Likelihood: $($netlogAssessment.likelihood)"
-    Write-Host "  NetLog Failure Events: $($netlogAssessment.total_failures)"
-    Write-Host "  Affected Hosts: $($netlogAssessment.affected_host_count)"
+    Write-Host "  NetLog Failure Events: $($netlogAssessment.total_failures)" -ForegroundColor (Resolve-CountColor -Count ([int]$netlogAssessment.total_failures))
+    Write-Host "  Affected Hosts: $($netlogAssessment.affected_host_count)" -ForegroundColor (Resolve-CountColor -Count ([int]$netlogAssessment.affected_host_count))
 
     Write-Host ""
     Write-Host "$HarLabel"
     Write-Host "  Total Requests: $($harSummary.total_requests)"
     Write-Host "  Unique Endpoints: $($harSummary.unique_endpoints)"
-    Write-Host "  Failed Calls: $($harSummary.failed_call_count)"
-    Write-Host "  Slow Calls: $($harSummary.slow_call_count)"
-    Write-Host "  Stalled Calls: $($harSummary.stalled_call_count)"
-    Write-Host ("  Failure Rate: {0:P1}" -f $harFailureRate)
-    Write-Host ("  Stall Rate: {0:P1}" -f $harStallRate)
+    Write-Host "  Failed Calls: $($harSummary.failed_call_count)" -ForegroundColor (Resolve-CountColor -Count ([int]$harSummary.failed_call_count))
+    Write-Host "  Slow Calls: $($harSummary.slow_call_count)" -ForegroundColor (Resolve-CountColor -Count ([int]$harSummary.slow_call_count))
+    Write-Host "  Stalled Calls: $($harSummary.stalled_call_count)" -ForegroundColor (Resolve-CountColor -Count ([int]$harSummary.stalled_call_count))
+    Write-Host ("  Failure Rate: {0:P1}" -f $harFailureRate) -ForegroundColor (Resolve-CountColor -Count ([int]$harSummary.failed_call_count))
+    Write-Host ("  Stall Rate: {0:P1}" -f $harStallRate) -ForegroundColor (Resolve-CountColor -Count ([int]$harSummary.stalled_call_count))
 
     Write-Host ""
     Write-Host "--- Top HAR Failed/Stalled URLs ---" -ForegroundColor Yellow
@@ -458,13 +473,13 @@ try {
     }
     else {
         foreach ($row in $topDiff) {
-            Write-Host "  $($row.Error): NetLog=$($row.NetLog), HAR=$($row.HAR), delta=$($row.Delta)"
+            Write-Host "  $($row.Error): NetLog=$($row.NetLog), HAR=$($row.HAR), delta=$($row.Delta)" -ForegroundColor (Resolve-DeltaColor -Delta ([int]$row.Delta))
         }
     }
 
     Write-Host ""
     Write-Host "--- Host Overlap ---" -ForegroundColor Yellow
-    Write-Host "  Shared failing hosts: $($commonFailingTargets.Count)"
+    Write-Host "  Shared failing hosts: $($commonFailingTargets.Count)" -ForegroundColor (Resolve-CountColor -Count $commonFailingTargets.Count)
     if ($commonFailingTargets.Count -gt 0) {
         foreach ($targetName in ($commonFailingTargets | Sort-Object | Select-Object -First 15)) {
             Write-Host "  - $targetName"
@@ -504,11 +519,11 @@ try {
 
     Write-Host ""
     Write-Host "--- Verdict: App-layer vs Network-layer vs Mixed ---" -ForegroundColor Yellow
-    Write-Host "  $verdict"
+    Write-Host "  $verdict" -ForegroundColor $(if ($verdict -eq "Network-layer") { "Yellow" } elseif ($verdict -eq "App-layer") { "Cyan" } else { "Magenta" })
 
     Write-Host ""
     Write-Host "--- Overall Recommendation ---" -ForegroundColor Green
-    Write-Host "  $overall"
+    Write-Host "  $overall" -ForegroundColor Green
 
     $result = [pscustomobject]@{
         generated_at = (Get-Date).ToString("o")

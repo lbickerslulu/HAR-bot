@@ -1,5 +1,7 @@
 import argparse
 import json
+import os
+import sys
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -87,6 +89,46 @@ NETWORK_ISSUE_MARKERS = (
     "ERR_INTERNET_DISCONNECTED",
     "ERR_NETWORK_CHANGED",
 )
+
+
+ANSI_RESET = "\033[0m"
+ANSI_BOLD = "\033[1m"
+ANSI_DIM = "\033[2m"
+ANSI_RED = "\033[31m"
+ANSI_GREEN = "\033[32m"
+ANSI_YELLOW = "\033[33m"
+ANSI_BLUE = "\033[34m"
+ANSI_MAGENTA = "\033[35m"
+ANSI_CYAN = "\033[36m"
+
+
+def supports_color() -> bool:
+    return os.getenv("NO_COLOR") is None and hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+
+
+def style_text(text: str, *styles: str) -> str:
+    if not supports_color() or not styles:
+        return text
+    return "".join(styles) + text + ANSI_RESET
+
+
+def score_style(score: int) -> str:
+    if score >= 65:
+        return ANSI_RED
+    if score >= 40:
+        return ANSI_YELLOW
+    return ANSI_GREEN
+
+
+def category_style(category: str) -> str:
+    return {
+        "TLS/Certificate": ANSI_RED,
+        "Proxy": ANSI_MAGENTA,
+        "DNS": ANSI_YELLOW,
+        "Connection": ANSI_CYAN,
+        "QUIC": ANSI_BLUE,
+        "HTTP": ANSI_GREEN,
+    }.get(category, ANSI_DIM)
 
 
 @dataclass
@@ -448,51 +490,57 @@ def main() -> int:
 
     assessment = reinstall_assessment(error_name_counts, affected_hosts)
 
-    print("===== NetLog Viewer =====")
+    print(style_text("===== NetLog Viewer =====", ANSI_BOLD, ANSI_CYAN))
     print("")
     print(f"File: {netlog_path}")
     print(f"Browser Hint: {browser_hint}")
     print(f"Total NetLog Events: {len(events)}")
-    print(f"Events With Failures: {assessment['total_failures']}")
+    print(f"Events With Failures: {style_text(str(assessment['total_failures']), ANSI_RED if assessment['total_failures'] else ANSI_GREEN, ANSI_BOLD)}")
     print(f"Unique Error Types: {len(error_name_counts)}")
-    print(f"Affected Hosts: {assessment['affected_host_count']}")
+    print(f"Affected Hosts: {style_text(str(assessment['affected_host_count']), ANSI_BOLD)}")
 
-    print("\nTop Net Errors:")
+    print("\n" + style_text("Top Net Errors:", ANSI_BOLD, ANSI_BLUE))
     if error_name_counts:
         for error_name, qty in error_name_counts.most_common(10):
-            print(f"  {qty}x  {error_name}")
+            print(f"  {style_text(f'{qty}x', ANSI_RED, ANSI_BOLD)}  {style_text(error_name, ANSI_RED)}")
     else:
-        print("  None")
+        print(f"  {style_text('None', ANSI_GREEN)}")
 
-    print("\nTop Error Event Types:")
+    print("\n" + style_text("Top Error Event Types:", ANSI_BOLD, ANSI_BLUE))
     if error_type_counts:
         for event_name, qty in error_type_counts.most_common(10):
-            print(f"  {qty}x  {event_name}")
+            print(f"  {style_text(f'{qty}x', ANSI_YELLOW, ANSI_BOLD)}  {event_name}")
     else:
-        print("  None")
+        print(f"  {style_text('None', ANSI_GREEN)}")
 
-    print("\nEvent Categories:")
+    print("\n" + style_text("Event Categories:", ANSI_BOLD, ANSI_BLUE))
     for category, qty in event_category_counts.most_common():
-        print(f"  {category}: {qty}")
+        print(f"  {style_text(category, category_style(category), ANSI_BOLD)}: {qty}")
 
-    print("\nReinstall Signal:")
-    print(f"  Score: {assessment['score']}/100")
-    print(f"  Likelihood: {assessment['likelihood']}")
+    print("\n" + style_text("Reinstall Signal:", ANSI_BOLD, ANSI_BLUE))
+    score_text = style_text(
+        f"{assessment['score']}/100",
+        score_style(assessment['score']),
+        ANSI_BOLD,
+    )
+    print(f"  Score: {score_text}")
+    print(f"  Likelihood: {style_text(assessment['likelihood'], score_style(assessment['score']))}")
     print(f"  Recommendation: {assessment['recommendation']}")
     print(f"  Local Signature Hits: {assessment['local_signature_count']}")
     print(f"  Network Signature Hits: {assessment['network_signature_count']}")
 
-    print("\nError Timeline:")
+    print("\n" + style_text("Error Timeline:", ANSI_BOLD, ANSI_BLUE))
     if error_events:
         for item in error_events[: max(args.limit, 0)]:
             print(
                 "  "
                 f"[{item.index}] time={item.time} "
                 f"type={item.event_type} phase={item.phase} "
-                f"source={item.source_type} host={item.host} error={item.error_name}"
+                f"source={item.source_type} host={item.host} "
+                f"error={style_text(item.error_name, ANSI_RED, ANSI_BOLD)}"
             )
     else:
-        print("  None")
+        print(f"  {style_text('None', ANSI_GREEN)}")
 
     if args.json_output:
         output_payload = {

@@ -78,6 +78,11 @@ UTILITY_DOMAIN_HINTS = (
     "cookielaw.org",
 )
 
+QUIQ_DOMAINS = [
+    "goquiq.com",
+    "quiq-api.com",
+]
+
 TELEMETRY_PATH_HINTS = (
     "/metrics",
     "/collect",
