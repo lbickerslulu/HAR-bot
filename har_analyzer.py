@@ -436,6 +436,46 @@ def classify_request(
     return "Unknown", "LOW", request_score
 
 
+def is_javascript_asset(url: str, response: dict[str, Any]) -> bool:
+    path = urlparse(url).path.lower()
+    if path.endswith((".js", ".mjs", ".cjs", ".jsx")):
+        return True
+    if path.endswith(".map"):
+        return False
+    mime = str(response.get("content", {}).get("mimeType", "")).lower()
+    return "javascript" in mime or "ecmascript" in mime
+
+
+def describe_js_failure(entry: dict[str, Any], response: dict[str, Any]) -> str | None:
+    """Return a reason string when a JS asset did not download successfully."""
+    status = int(response.get("status", 0) or 0)
+    content = response.get("content", {}) if isinstance(response.get("content", {}), dict) else {}
+    body_size = int(response.get("bodySize", 0) or 0)
+    content_size = int(content.get("size", 0) or 0)
+    error = entry.get("_error") or response.get("_error")
+
+    if error:
+        return f"transport error: {normalize_whitespace(str(error))}"
+    if status == 0:
+        return "no response (aborted/blocked/timed out)"
+    if status >= 500:
+        return f"server error {status}"
+    if status >= 400:
+        return f"client error {status}"
+    if status in (301, 302, 303, 307, 308) and not response.get("redirectURL"):
+        return f"redirect {status} without target"
+    if 300 <= status < 400:
+        return None
+    # Chrome records bytes on the wire even when the HAR omits the body text.
+    transfer_size = response.get("_transferSize")
+    if isinstance(transfer_size, (int, float)) and transfer_size > 0:
+        return None
+    # Cached replays report bodySize -1 but still carry a decoded size.
+    if content_size <= 0 and body_size <= 0 and status != 304:
+        return f"empty body (status {status})"
+    return None
+
+
 def should_include_call(category: str) -> bool:
     return category in {
         "Search",
@@ -619,11 +659,39 @@ def analyze_har(file_path: str) -> dict[str, Any]:
     # Track duplicates for logging
     dedup_map: dict[str, str] = {}  # Maps dedup_id to first occurrence URL
     duplicate_count = 0
+    connect_aws_calls: list[dict[str, Any]] = []
+    js_asset_count = 0
+    failed_js_assets: list[dict[str, Any]] = []
 
     for entry_idx, entry in enumerate(entries):
         request = entry.get("request", {})
         response = entry.get("response", {})
         url, _, _, _ = extract_request_details(entry)
+
+        if is_javascript_asset(url, response):
+            js_asset_count += 1
+            js_failure_reason = describe_js_failure(entry, response)
+            if js_failure_reason:
+                failed_js_assets.append({
+                    "started_at": entry.get("startedDateTime", ""),
+                    "method": request.get("method", "GET"),
+                    "status": int(response.get("status", 0) or 0),
+                    "status_text": normalize_whitespace(str(response.get("statusText", ""))),
+                    "time_ms": float(entry.get("time", 0) or 0),
+                    "url": url,
+                    "domain": urlparse(url).netloc or "unknown",
+                    "file_name": Path(urlparse(url).path).name or url,
+                    "initiator": normalize_whitespace(str((entry.get("_initiator") or {}).get("url", ""))) if isinstance(entry.get("_initiator"), dict) else "",
+                    "reason": js_failure_reason,
+                })
+
+        if "connect.aws" in url:
+            connect_aws_calls.append({
+                "started_at": entry.get("startedDateTime", ""),
+                "status": int(response.get("status", 0) or 0),
+                "time_ms": float(entry.get("time", 0) or 0),
+                "url": url,
+            })
         
         # Compute dedup ID
         body_text = request.get("postData", {}).get("text", "")
@@ -815,6 +883,9 @@ def analyze_har(file_path: str) -> dict[str, Any]:
             for category, counter in domain_counts_by_category.items()
         },
         "network_calls": sorted(network_calls, key=lambda call: (call.started_at, call.duration_ms)),
+        "connect_aws_calls": sorted(connect_aws_calls, key=lambda c: c["started_at"]),
+        "js_asset_count": js_asset_count,
+        "failed_js_assets": sorted(failed_js_assets, key=lambda a: a["started_at"]),
     }
 
 
@@ -891,6 +962,43 @@ def print_summary(results: dict[str, Any], limit: int) -> None:
         print("\n" + style_text(f"Top {category} Endpoints:", ANSI_BOLD, ANSI_BLUE))
         for endpoint, count in endpoints[:5]:
             print(f"  {style_text(f'{count}x', ANSI_BOLD)}  {endpoint}")
+
+    print("\n" + style_text("Amazon Connect (connect.aws) Activity:", ANSI_BOLD, ANSI_BLUE))
+    connect_calls = results.get("connect_aws_calls", [])
+    if connect_calls:
+        for c in connect_calls:
+            status = c["status"]
+            # 101 = successful websocket upgrade
+            flagged = status not in (200, 101)
+            line = f"{status} | {c['time_ms']:.0f}ms | {c['url']}"
+            if flagged:
+                print("  " + style_text(f"FLAG: {line}", ANSI_BOLD, ANSI_RED))
+            else:
+                print(f"  {line}")
+        flagged_count = sum(1 for c in connect_calls if c["status"] not in (200, 101))
+        print(f"  Total: {len(connect_calls)} | Flagged (non-200/101): {style_text(str(flagged_count), ANSI_BOLD, ANSI_RED if flagged_count else ANSI_GREEN)}")
+    else:
+        print("  None")
+
+    print("\n" + style_text("Failed JavaScript Downloads (*.js):", ANSI_BOLD, ANSI_BLUE))
+    failed_js = results.get("failed_js_assets", [])
+    js_total = results.get("js_asset_count", 0)
+    if failed_js:
+        reason_counts = Counter(asset["reason"] for asset in failed_js)
+        for asset in failed_js:
+            label = f"{asset['status'] or 'ERR'} | {asset['time_ms']:.0f}ms | {asset['file_name']} | {asset['reason']}"
+            print("  " + style_text(label, ANSI_BOLD, ANSI_RED))
+            print(style_text(f"      {asset['url']}", ANSI_DIM))
+            if asset["initiator"]:
+                print(style_text(f"      initiator: {asset['initiator']}", ANSI_DIM))
+        print(
+            f"  Total JS requests: {js_total} | Failed: "
+            + style_text(str(len(failed_js)), ANSI_BOLD, ANSI_RED)
+        )
+        for reason, count in reason_counts.most_common():
+            print(f"    {style_text(f'{count}x', ANSI_BOLD)}  {reason}")
+    else:
+        print(f"  None ({js_total} JS requests all downloaded)")
 
     print("\n" + style_text("Linear Request Timeline:", ANSI_BOLD, ANSI_BLUE))
     if not network_calls:
@@ -1016,6 +1124,13 @@ def write_json_summary(results: dict[str, Any], output_path: str, limit: int) ->
             }
             for call in failed_or_stalled_calls[:20]
         ],
+        "connect_aws_calls": [
+            {**c, "flagged": c["status"] not in (200, 101)}
+            for c in results.get("connect_aws_calls", [])
+        ],
+        "js_asset_count": results.get("js_asset_count", 0),
+        "failed_js_asset_count": len(results.get("failed_js_assets", [])),
+        "failed_js_assets": results.get("failed_js_assets", []),
         "timeline": [
             {
                 "started_at": call.started_at,
